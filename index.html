@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Through The Looking Glass — Hermès</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ─── ROOT ─── */
 :root {
@@ -28,20 +28,23 @@
 html { font-size:16px; }
 
 body {
-  font-family:'Jost', sans-serif;
+  font-family:'Manrope', sans-serif;
   background: var(--cream);
   color: var(--brown);
-  min-height: 100dvh;
-  overflow-x: hidden;
+  height: 100dvh;
+  overflow: hidden;  /* body never scrolls — pages manage their own inner scroll */
+  overscroll-behavior: none;
 }
 
 /* ─── PAGE SYSTEM ─── */
 .page {
   display: none;
-  min-height: 100dvh;
+  height: 100dvh;
   flex-direction: column;
   background: var(--cream);
-  animation: pageFadeIn 0.4s ease forwards;
+  overflow: hidden;
+  overscroll-behavior: none;
+  animation: pageFadeIn 0.35s ease forwards;
 }
 .page.active { display: flex; }
 
@@ -55,14 +58,15 @@ body {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(250,248,244,0.95);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+  background: rgba(250,248,244,0.88);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 0.5px solid rgba(58,42,28,0.1);
   padding: 0 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
+  height: 52px;
   flex-shrink: 0;
 }
 
@@ -83,7 +87,7 @@ body {
 }
 
 .nav-btn {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 10px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -103,8 +107,26 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   position: relative;
   overflow: hidden;
+}
+
+.home-bottom {
+  padding: 0 28px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.home-bottom-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  text-align: center;
 }
 
 .home-top {
@@ -134,7 +156,7 @@ body {
 
 .home-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(44px, 12vw, 72px);
+  font-size: clamp(44px, 17vw, 72px);
   font-weight: 300;
   line-height: 0.95;
   letter-spacing: -0.01em;
@@ -148,7 +170,7 @@ body {
 
 .home-subtitle {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 16px;
+  font-size: 18px;
   font-style: italic;
   color: var(--taupe);
   margin-bottom: 28px;
@@ -169,33 +191,22 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  width: calc(100% - 56px);
-  margin: 0 28px 32px;
-  padding: 18px 24px;
+  gap: 10px;
+  width: 100%;
+  padding: 17px 24px;
   background: var(--orange);
   color: white;
   border: none;
   cursor: pointer;
-  font-family: 'Jost', sans-serif;
-  font-size: 11px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  font-weight: 500;
-  transition: background 0.3s ease, transform 0.15s ease;
-  position: relative;
-  overflow: hidden;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: 14px;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(232,96,28,0.35);
 }
-.cta-btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.15);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.cta-btn:hover::after { opacity:1; }
-.cta-btn:active { transform: scale(0.98); }
+.cta-btn:active { transform: scale(0.97); box-shadow: 0 2px 10px rgba(232,96,28,0.2); }
 
 .cta-icon {
   width: 20px; height: 20px;
@@ -208,34 +219,7 @@ body {
   font-size: 10px;
 }
 
-.home-features {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  border-top: 1px solid var(--border);
-  margin-top: auto;
-}
-
-.home-feature {
-  padding: 20px 16px;
-  border-right: 1px solid var(--border);
-  text-align: center;
-}
-.home-feature:last-child { border-right: none; }
-
-.hf-icon {
-  font-size: 18px;
-  margin-bottom: 8px;
-  display: block;
-  color: var(--brown);
-}
-
-.hf-label {
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--taupe);
-  line-height: 1.5;
-}
+/* home-features removed */
 
 
 /* ─── ─── ─── CAMERA PAGE ─── ─── ─── */
@@ -326,9 +310,7 @@ body {
 }
 .glb-frame-wrap {
   position: absolute;
-  border-radius: 4px;
-  overflow: hidden;
-  box-shadow: 0 0 30px rgba(232,96,28,0.25);
+  /* No overflow:hidden — let the 3D model breathe beyond its bounds */
   background: transparent;
 }
 .glb-frame-wrap iframe {
@@ -336,6 +318,9 @@ body {
   height: 100%;
   border: none;
   background: transparent;
+  /* iframes scale their content; giving extra padding via transform */
+  transform: scale(1.15);
+  transform-origin: center center;
 }
 /* Subtle orange glow ring around each model */
 .glb-frame-wrap::after {
@@ -402,15 +387,17 @@ body {
 .product-popup {
   position: absolute;
   bottom: 16px;
-  left: 16px; right: 16px;
-  background: rgba(250,248,244,0.96);
+  left: 12px; right: 12px;
+  background: rgba(252,250,247,0.92);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
   color: var(--brown);
   padding: 20px;
   display: none;
-  animation: popupIn 0.3s ease forwards;
-  border-top: 2px solid var(--orange);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 -4px 30px rgba(0,0,0,0.3);
+  animation: popupIn 0.28s cubic-bezier(0.32,0.72,0,1) forwards;
+  border-radius: 20px;
+  border: 0.5px solid rgba(255,255,255,0.6);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.25);
 }
 .product-popup.visible { display: block; }
 
@@ -473,17 +460,19 @@ body {
   font-size: 11px;
 }
 
-/* Camera controls bar — flex child, sits at bottom of camera-page column */
+/* Camera controls */
 .camera-controls {
   flex-shrink: 0;
-  height: 88px;
-  background: rgba(10,10,10,0.9);
-  backdrop-filter: blur(16px);
-  border-top: 1px solid rgba(232,96,28,0.25);
+  height: 96px;
+  background: rgba(20,20,20,0.20);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 0.5px solid rgba(255,255,255,0.12);
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 0 32px;
+  padding: 0 28px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   z-index: 20;
 }
 
@@ -519,28 +508,29 @@ body {
 }
 
 .cam-ctrl-label {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 9px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: rgba(255,255,255,0.5);
 }
 
-/* Camera overlay UI — inside camera-viewport, top of the live view */
+/* Camera overlay HUD — iOS live activity style pill */
 .camera-hud {
   position: absolute;
-  top: 16px; left: 16px; right: 16px;
+  top: 14px; left: 14px; right: 14px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   pointer-events: none;
   z-index: 10;
-  /* glass pill background so it's legible over any camera feed */
-  background: rgba(10,10,10,0.35);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(232,96,28,0.15);
-  border-radius: 8px;
-  padding: 10px 14px;
+  background: rgba(20,20,20,0.20);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 0.5px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 10px 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
 }
 
 .hud-status {
@@ -616,13 +606,15 @@ body {
 .info-modal.open { display: flex; }
 
 .info-sheet {
-  background: var(--warm-white);
+  background: rgba(252,250,247,0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   width: 100%;
-  max-height: 85dvh;
-  border-radius: 16px 16px 0 0;
+  max-height: 88dvh;
+  border-radius: 20px 20px 0 0;
   overflow-y: auto;
-  padding: 28px 24px 48px;
-  animation: sheetUp 0.35s ease;
+  padding: 12px 24px 48px;
+  animation: sheetUp 0.3s cubic-bezier(0.32,0.72,0,1);
 }
 @keyframes sheetUp {
   from { transform:translateY(100%); }
@@ -687,19 +679,22 @@ body {
 }
 
 .sheet-close {
-  margin-top: 28px;
+  margin-top: 24px;
   width: 100%;
-  padding: 15px;
+  padding: 16px;
   background: var(--orange);
   color: white;
   border: none;
   cursor: pointer;
-  font-family: 'Jost', sans-serif;
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  font-weight: 500;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(232,96,28,0.3);
+  transition: transform 0.15s ease;
 }
+.sheet-close:active { transform: scale(0.98); }
 
 
 /* ─── ─── ─── STORY PAGE ─── ─── ─── */
@@ -795,9 +790,10 @@ body {
   display: flex;
   gap: 14px;
   align-items: center;
-  padding: 16px;
+  padding: 16px 18px;
   background: white;
-  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 1px 8px rgba(58,42,28,0.07);
 }
 
 .artist-avatar {
@@ -885,15 +881,17 @@ body {
 }
 
 .keepsake-card {
-  border: 1px solid var(--border);
+  border: none;
   background: white;
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 12px rgba(58,42,28,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .keepsake-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(58,42,28,0.14);
 }
 
 .keepsake-preview {
@@ -975,21 +973,23 @@ body {
 }
 
 .kp-dl-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   color: var(--orange);
   cursor: pointer;
-  background: none;
+  background: rgba(232,96,28,0.08);
   border: none;
-  padding: 0;
-  font-family: 'Jost', sans-serif;
-  transition: letter-spacing 0.3s ease;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-family: 'Manrope', sans-serif;
+  transition: background 0.2s ease, transform 0.15s ease;
 }
-.kp-dl-btn:hover { letter-spacing: 0.2em; }
+.kp-dl-btn:hover { background: rgba(232,96,28,0.14); }
+.kp-dl-btn:active { transform: scale(0.96); }
 
 .kp-dl-icon {
   width: 20px; height: 20px;
@@ -1008,16 +1008,21 @@ body {
   bottom: 32px;
   left: 50%;
   transform: translateX(-50%) translateY(80px);
-  background: var(--brown);
+  background: rgba(30,20,14,0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   color: white;
-  font-size: 11px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 12px 24px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  padding: 11px 20px;
+  border-radius: 24px;
   white-space: nowrap;
-  transition: transform 0.4s ease;
+  border: 0.5px solid rgba(255,255,255,0.12);
+  transition: transform 0.4s cubic-bezier(0.32,0.72,0,1);
   z-index: 999;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
@@ -1057,39 +1062,27 @@ body {
   <nav class="nav">
     <span class="nav-brand">Hermès</span>
     <div class="nav-links">
-      <button class="nav-btn active" onclick="navigate('home')">Home</button>
-      <button class="nav-btn" onclick="navigate('camera')">AR</button>
-      <button class="nav-btn" onclick="navigate('story')">Story</button>
+      <button class="nav-btn active" onclick="navigate('home')" data-page="home">Home</button>
+      <button class="nav-btn" onclick="navigate('camera')" data-page="camera">AR</button>
+      <button class="nav-btn" onclick="navigate('story')" data-page="story">Story</button>
     </div>
   </nav>
 
-  <div class="home-hero">
+  <div class="home-hero" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+    <div class="home-bottom">
+      <!-- <div class="home-bottom-title">Through The Looking Glass</div> -->
+      <button class="cta-btn" onclick="navigate('camera')" data-page="camera">
+        <span class="cta-icon">⊙</span>
+        Open AR Camera
+      </button>
+    </div>
+
     <div class="home-top">
       <h1 class="home-title">Through<br><em>The Looking<br></em>Glass</h1>
       <p class="home-subtitle">New York City · Spring · 2026</p>
-      <p class="home-desc">
+      <!-- <p class="home-desc">
         You have arrived at a threshold. The window before you holds a world within — objects that remember, silk that breathes, stories rendered visible. Step inside.
-      </p>
-    </div>
-
-    <button class="cta-btn" onclick="navigate('camera')">
-      <span class="cta-icon">⊙</span>
-      Open Camera
-    </button>
-
-    <div class="home-features">
-      <div class="home-feature">
-        <span class="hf-icon">◎</span>
-        <div class="hf-label">AR<br>Overlays</div>
-      </div>
-      <div class="home-feature">
-        <span class="hf-icon">♪</span>
-        <div class="hf-label">Spatial<br>Audio</div>
-      </div>
-      <div class="home-feature">
-        <span class="hf-icon">↓</span>
-        <div class="hf-label">Digital<br>Keepsakes</div>
-      </div>
+      </p> -->
     </div>
   </div>
 </div>
@@ -1099,9 +1092,9 @@ body {
   <nav class="nav" style="background:rgba(10, 10, 10, 0.20);border-color:rgba(232,96,28,0.2);">
     <span class="nav-brand" style="color:rgba(255,255,255,0.85);">Hermès</span>
     <div class="nav-links">
-      <button class="nav-btn" onclick="navigate('home')" style="color:rgba(255,255,255,0.4);">Home</button>
-      <button class="nav-btn active" onclick="navigate('camera')" style="color:var(--orange);border-bottom-color:var(--orange);">AR</button>
-      <button class="nav-btn" onclick="navigate('story')" style="color:rgba(255,255,255,0.4);">Story</button>
+      <button class="nav-btn" onclick="navigate('home')" data-page="home" style="color:rgba(255,255,255,0.4);">Home</button>
+      <button class="nav-btn active" onclick="navigate('camera')" data-page="camera" style="color:var(--orange);border-bottom-color:var(--orange);">AR</button>
+      <button class="nav-btn" onclick="navigate('story')" data-page="story" style="color:rgba(255,255,255,0.4);">Story</button>
     </div>
   </nav>
 
@@ -1240,19 +1233,19 @@ body {
   <nav class="nav">
     <span class="nav-brand">Hermès</span>
     <div class="nav-links">
-      <button class="nav-btn" onclick="navigate('home')">Home</button>
-      <button class="nav-btn" onclick="navigate('camera')">AR</button>
-      <button class="nav-btn active" onclick="navigate('story')">Story</button>
+      <button class="nav-btn" onclick="navigate('home')" data-page="home">Home</button>
+      <button class="nav-btn" onclick="navigate('camera')" data-page="camera">AR</button>
+      <button class="nav-btn active" onclick="navigate('story')" data-page="story">Story</button>
     </div>
   </nav>
 
-  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;height:calc(100dvh - 56px);">
+  <div data-scroll class="scroll-inner" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;height:calc(100dvh - 56px);">
     <div class="story-hero">
       <div class="story-season">New York City · Spring · 2026</div>
-      <h2 class="story-title">Through<br><em>The</em><br>Looking Glass</h2>
-      <p class="story-artist-line">A window conceived by Tim Lahan</p>
+      <h2 class="story-title">Through<br><em>The Looking</em><br> Glass</h2>
+      <p class="story-artist-line">A window in collaboration with Tim Lahan</p>
 
-      <div class="story-window-wrap">
+      <!-- <div class="story-window-wrap">
         <div class="story-window-scene"></div>
         <div class="story-win-scarf"></div>
         <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.2;" preserveAspectRatio="none">
@@ -1261,7 +1254,7 @@ body {
         </svg>
         <div class="story-win-particles" id="storyParticles"></div>
         <div style="position:absolute;top:18%;left:20%;width:60%;height:3px;background:linear-gradient(90deg,transparent,rgba(232,96,28,0.6),transparent);transform:rotate(10deg);animation:scarfDrift 8s ease-in-out infinite 2s;"></div>
-      </div>
+      </div> -->
 
       <div class="story-artist-card">
         <div class="artist-avatar">TL</div>
@@ -1275,10 +1268,10 @@ body {
     <div class="story-concept">
       <div class="section-label">The Concept</div>
       <div class="concept-quote">
-        "I wanted the window to ask a question — not answer one. What do we see when we look through something rather than at it?"
+        "I wanted to blah blach"
       </div>
       <p class="concept-body">
-        Drawing on Lewis Carroll's threshold imagery and the Hermès atelier traditions of Lyon silk weaving, Lahan constructed a window that exists in perpetual becoming. Objects are not displayed — they are discovered. The silk floats as if just released from a hand. The leather bag casts a shadow that precedes it. The window is an invitation to look again.<br><br>
+        Drawing on blah bla.<br><br>
         Installed over eleven days at the Madison Avenue flagship, the composition required 34 distinct silk samples, three artisans from the Bourgoin-Jallieu manufacture, and one mirror placed behind a mirror.
       </p>
     </div>
@@ -1396,10 +1389,27 @@ body {
 <script>
 /* ─── NAVIGATION ─── */
 function navigate(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  window.scrollTo(0, 0);
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active');
+    p.style.display = 'none';
+  });
 
+  // Show target page
+  const target = document.getElementById('page-' + page);
+  if (!target) return;
+  target.style.display = 'flex';
+  target.classList.add('active');
+
+  // Reset any inner scroll containers to top
+  target.querySelectorAll('.scroll-inner').forEach(el => { el.scrollTop = 0; });
+
+  // Sync nav button active state across all navs
+  document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.page === page);
+  });
+
+  // Camera lifecycle
   if (page === 'camera') {
     startCamera();
     if (!audioMuted) playAudio();
@@ -1730,20 +1740,20 @@ function positionGLBOverlays(canvas, r) {
   const ww = r.w * sx;
   const wh = r.h * sy;
 
-  // GLB 1: upper-centre — largest, main feature
+  // GLB 1: upper-centre — largest, main feature (sized generously so model isn't cropped)
   const g1 = document.getElementById('glb1');
-  const s1 = Math.min(ww * 0.45, wh * 0.45);
-  g1.style.cssText = `width:${s1}px;height:${s1}px;left:${wx + ww*0.5 - s1*0.5}px;top:${wy + wh*0.08}px;`;
+  const s1 = Math.min(ww * 0.60, wh * 0.55);
+  g1.style.cssText = `width:${s1}px;height:${s1}px;left:${wx + ww*0.5 - s1*0.5}px;top:${wy + wh*0.04}px;`;
 
-  // GLB 2: lower-right — smaller
+  // GLB 2: lower-right — medium
   const g2 = document.getElementById('glb2');
-  const s2 = s1 * 0.55;
-  g2.style.cssText = `width:${s2}px;height:${s2}px;left:${wx + ww*0.62}px;top:${wy + wh*0.55}px;`;
+  const s2 = s1 * 0.60;
+  g2.style.cssText = `width:${s2}px;height:${s2}px;left:${wx + ww*0.58}px;top:${wy + wh*0.52}px;`;
 
   // GLB 3: left side — medium
   const g3 = document.getElementById('glb3');
-  const s3 = s1 * 0.45;
-  g3.style.cssText = `width:${s3}px;height:${s3}px;left:${wx + ww*0.05}px;top:${wy + wh*0.42}px;`;
+  const s3 = s1 * 0.50;
+  g3.style.cssText = `width:${s3}px;height:${s3}px;left:${wx - s3*0.15}px;top:${wy + wh*0.40}px;`;
 }
 
 function setDetectHUD(found) {
