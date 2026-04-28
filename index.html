@@ -88,7 +88,7 @@
       flex-shrink: 0;
     }
 
-    .nav-brand {
+    /* .nav-brand {
       font-family: 'Cormorant Garamond', serif;
       font-size: 15px;
       letter-spacing: 0.3em;
@@ -96,6 +96,13 @@
       color: var(--brown);
       font-weight: 400;
       text-decoration: none;
+    } */
+
+    .nav-logo {
+      height: 25px;
+      width: auto;
+      display: block;
+      object-fit: contain;
     }
 
     .nav-links {
@@ -1298,7 +1305,8 @@
 <body>
   <div id="page-home" class="page active">
     <nav class="nav">
-      <span class="nav-brand">Hermès</span>
+      <img src="./Hermès Logo.png" alt="Hermès" class="nav-logo">
+
       <div class="nav-links">
         <button class="nav-btn active" onclick="navigate('home')" data-page="home">Home</button>
         <button class="nav-btn" onclick="navigate('camera')" data-page="camera">AR</button>
@@ -1320,7 +1328,8 @@
 
   <div id="page-camera" class="page camera-page">
     <nav class="nav" style="background:rgba(10,10,10,0.20);border-color:rgba(232,96,28,0.2);">
-      <span class="nav-brand" style="color:rgba(255,255,255,0.85);">Hermès</span>
+      <!-- <span class="nav-brand" style="color:rgba(255,255,255,0.85);">Hermès</span> -->
+      <img src="./Hermès Logo.png" alt="Hermès" class="nav-logo">
       <div class="nav-links">
         <button class="nav-btn" onclick="navigate('home')" data-page="home"
           style="color:rgba(255,255,255,0.4);">Home</button>
@@ -1409,7 +1418,8 @@
 
   <div id="page-story" class="page story-page">
     <nav class="nav">
-      <span class="nav-brand">Hermès</span>
+      <img src="./Hermès Logo.png" alt="Hermès" class="nav-logo">
+
       <div class="nav-links">
         <button class="nav-btn" onclick="navigate('home')" data-page="home">Home</button>
         <button class="nav-btn" onclick="navigate('camera')" data-page="camera">AR</button>
@@ -1636,35 +1646,101 @@
       const { data } = detCtx.getImageData(0, 0, bw, bh);
       const lum = new Uint8Array(bw * bh);
       for (let i = 0; i < lum.length; i++)lum[i] = (data[i * 4] * 77 + data[i * 4 + 1] * 150 + data[i * 4 + 2] * 29) >> 8;
+
       const rowAvg = new Float32Array(bh), colAvg = new Float32Array(bw);
       for (let y = 0; y < bh; y++) { let s = 0; for (let x = 0; x < bw; x++)s += lum[y * bw + x]; rowAvg[y] = s / bw; }
       for (let x = 0; x < bw; x++) { let s = 0; for (let y = 0; y < bh; y++)s += lum[y * bw + x]; colAvg[x] = s / bh; }
+
       const globalAvg = rowAvg.reduce((a, b) => a + b, 0) / bh;
-      const thresh = globalAvg * 1.35; // 35% brighter than average (was 18%)
+      // Calibrated to real Hermes window: interior is ~20% brighter than street avg
+      const thresh = globalAvg * 1.20;
+
       let top = -1, bottom = -1, left = -1, right = -1;
       for (let y = 0; y < bh; y++)if (rowAvg[y] > thresh) { if (top < 0) top = y; bottom = y; }
       for (let x = 0; x < bw; x++)if (colAvg[x] > thresh) { if (left < 0) left = x; right = x; }
+
       const fw = right - left, fh = bottom - top;
-      // Size check: minimum 22% each axis
-      if (top < 0 || left < 0 || fw < bw * 0.22 || fh < bh * 0.22) { windowStable = Math.max(0, windowStable - 2); if (windowStable === 0) windowRect = null; return; }
-      // Aspect ratio check: 0.3–4.0 (plausible window shape)
+
+      // Must cover at least 12% of frame each axis
+      if (top < 0 || left < 0 || fw < bw * 0.12 || fh < bh * 0.12) {
+        windowStable = Math.max(0, windowStable - 2); if (windowStable === 0) windowRect = null; return;
+      }
+
+      // Aspect ratio: 0.3 to 4.0
       const ar = fw / fh;
-      if (ar < 0.3 || ar > 4.0) { windowStable = Math.max(0, windowStable - 2); if (windowStable === 0) windowRect = null; return; }
-      // Edge sharpness: must see ≥18 luminance units of contrast at boundary
-      const N = 6; let edgeScore = 0;
+      if (ar < 0.3 || ar > 4.0) {
+        windowStable = Math.max(0, windowStable - 2); if (windowStable === 0) windowRect = null; return;
+      }
+
+      // Edge sharpness: at least 8 avg luminance units contrast at boundary
+      // (real windows set into stone have shadowed reveals, not pure-black frames)
+      const N = 8; let edgeScore = 0;
       if (top > 1) { for (let i = 0; i < N; i++) { const x = Math.floor(left + (i + 0.5) * fw / N); edgeScore += Math.abs(lum[top * bw + x] - lum[(top - 1) * bw + x]); } }
       if (left > 1) { for (let i = 0; i < N; i++) { const y = Math.floor(top + (i + 0.5) * fh / N); edgeScore += Math.abs(lum[y * bw + left] - lum[y * bw + (left - 1)]); } }
-      if (edgeScore / (N * 2) < 18) { windowStable = Math.max(0, windowStable - 1); if (windowStable === 0) windowRect = null; return; }
-      // Interior uniformity: grid of 16 samples must average above threshold
+      if (edgeScore / (N * 2) < 8) {
+        windowStable = Math.max(0, windowStable - 1); if (windowStable === 0) windowRect = null; return;
+      }
+
+      // Interior uniformity: 4x4 grid must average at least 80% of threshold
       let interior = 0; const G = 4;
-      for (let gy = 0; gy < G; gy++)for (let gx = 0; gx < G; gx++) { const sx = Math.floor(left + (gx + 1) * fw / (G + 1)), sy = Math.floor(top + (gy + 1) * fh / (G + 1)); interior += lum[sy * bw + sx]; }
-      if (interior / (G * G) < thresh * 0.85) { windowStable = Math.max(0, windowStable - 1); if (windowStable === 0) windowRect = null; return; }
-      // All checks passed
-      const sx = canvas.width / bw, sy = canvas.height / bh;
-      const nr = { x: left * sx, y: top * sy, w: fw * sx, h: fh * sy };
+      for (let gy = 0; gy < G; gy++)for (let gx = 0; gx < G; gx++) {
+        const sx = Math.floor(left + (gx + 1) * fw / (G + 1)), sy = Math.floor(top + (gy + 1) * fh / (G + 1));
+        interior += lum[sy * bw + sx];
+      }
+      if (interior / (G * G) < thresh * 0.80) {
+        windowStable = Math.max(0, windowStable - 1); if (windowStable === 0) windowRect = null; return;
+      }
+
+      // All checks passed — smooth toward new rect
+      const scx = canvas.width / bw, scy = canvas.height / bh;
+      const nr = { x: left * scx, y: top * scy, w: fw * scx, h: fh * scy };
       if (!windowRect) { windowRect = nr; }
-      else { const k = 0.10; windowRect.x += (nr.x - windowRect.x) * k; windowRect.y += (nr.y - windowRect.y) * k; windowRect.w += (nr.w - windowRect.w) * k; windowRect.h += (nr.h - windowRect.h) * k; }
+      else {
+        const k = 0.10;
+        windowRect.x += (nr.x - windowRect.x) * k; windowRect.y += (nr.y - windowRect.y) * k;
+        windowRect.w += (nr.w - windowRect.w) * k; windowRect.h += (nr.h - windowRect.h) * k;
+      }
       windowStable = Math.min(windowStable + 1, 60);
+
+      // Secondary pass: locate the blue-sky artwork inside the window
+      // The paper bird sits inside a sky-blue painting — track it to anchor bird 1
+      detectBlueBird(data, bw, bh, left, top, fw, fh, canvas);
+    }
+
+    // Tracks the sky-blue artwork frame that contains the paper bird silhouette.
+    // Returns its centre as fractions of the window rect so bird 1 hovers over it.
+    let blueBirdPos = null;
+
+    function detectBlueBird(data, bw, bh, winLeft, winTop, winW, winH, canvas) {
+      const xl = Math.max(0, winLeft), xr = Math.min(bw - 1, winLeft + winW);
+      const yt = Math.max(0, winTop), yb = Math.min(bh - 1, winTop + winH);
+
+      let bMinX = xr, bMaxX = xl, bMinY = yb, bMaxY = yt, bCount = 0;
+
+      for (let y = yt; y < yb; y += 2) {
+        for (let x = xl; x < xr; x += 2) {
+          const i = (y * bw + x) * 4;
+          const r = data[i], g = data[i + 1], b = data[i + 2];
+          // Sky-blue signature: strong blue, decent green, clearly less red
+          // Calibrated from window image pixels: (63,138,221), (74,168,255), (82,179,255)
+          if (b > 160 && g > 100 && b - r > 50 && b - g > 15) {
+            if (x < bMinX) bMinX = x; if (x > bMaxX) bMaxX = x;
+            if (y < bMinY) bMinY = y; if (y > bMaxY) bMaxY = y;
+            bCount++;
+          }
+        }
+      }
+
+      const blueW = bMaxX - bMinX, blueH = bMaxY - bMinY;
+      if (bCount > 30 && blueW > winW * 0.04 && blueH > winH * 0.03) {
+        const cx = (bMinX + bMaxX) / 2, cy = (bMinY + bMaxY) / 2;
+        const rx = (cx - winLeft) / winW, ry = (cy - winTop) / winH;
+        if (!blueBirdPos) { blueBirdPos = { rx, ry }; }
+        else { const k = 0.08; blueBirdPos.rx += (rx - blueBirdPos.rx) * k; blueBirdPos.ry += (ry - blueBirdPos.ry) * k; }
+      } else {
+        // Drift back to a sensible default if blue not found
+        if (blueBirdPos) { blueBirdPos.rx += (0.55 - blueBirdPos.rx) * 0.02; blueBirdPos.ry += (0.35 - blueBirdPos.ry) * 0.02; }
+      }
     }
 
     function drawScanOverlay(ctx, W, H, t) {
