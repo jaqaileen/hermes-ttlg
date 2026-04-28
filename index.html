@@ -1582,7 +1582,7 @@
     function stopCamera() {
       if (arRAF) { cancelAnimationFrame(arRAF); arRAF = null; }
       if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
-      windowRect = null; windowStable = 0; arAnimTime = 0; birdsInitialised = false;
+      windowRect = null; windowStable = 0; arAnimTime = 0; birdsInitialised = false; blueBirdPos = null;
       const c = document.getElementById('arCanvas');
       if (c) c.getContext('2d').clearRect(0, 0, c.width, c.height);
       setDetectHUD(false);
@@ -1732,12 +1732,21 @@
       const cr = canvas.getBoundingClientRect(), vp = document.querySelector('.camera-viewport').getBoundingClientRect();
       const sx = cr.width / canvas.width, sy = cr.height / canvas.height;
       const wx = (r.x * sx) + cr.left - vp.left, wy = (r.y * sy) + cr.top - vp.top, ww = r.w * sx, wh = r.h * sy;
-      const s1 = Math.min(ww * 0.55, wh * 0.50), w1 = document.getElementById('mv1wrap');
-      if (w1) w1.style.cssText = `position:absolute;width:${s1}px;height:${s1}px;left:${wx + ww * 0.5 - s1 * 0.5}px;top:${wy + wh * 0.05}px;overflow:hidden;`;
+      const s1 = Math.min(ww * 0.55, wh * 0.50);
+
+      // Bird 1 — anchored to detected blue-bird painting location (or default upper-centre)
+      const b1x = blueBirdPos ? blueBirdPos.rx : 0.50;
+      const b1y = blueBirdPos ? blueBirdPos.ry : 0.22;
+      const w1 = document.getElementById('mv1wrap');
+      if (w1) w1.style.cssText = `position:absolute;width:${s1}px;height:${s1}px;left:${wx + ww * b1x - s1 * 0.5}px;top:${wy + wh * b1y - s1 * 0.3}px;overflow:hidden;`;
+
+      // Bird 2 — lower right, fixed relative position
       const s2 = s1 * 0.62, w2 = document.getElementById('mv2wrap');
-      if (w2) w2.style.cssText = `position:absolute;width:${s2}px;height:${s2}px;left:${wx + ww * 0.60}px;top:${wy + wh * 0.55}px;overflow:hidden;`;
+      if (w2) w2.style.cssText = `position:absolute;width:${s2}px;height:${s2}px;left:${wx + ww * 0.62}px;top:${wy + wh * 0.55}px;overflow:hidden;`;
+
+      // Bird 3 — left side, fixed relative position
       const s3 = s1 * 0.52, w3 = document.getElementById('mv3wrap');
-      if (w3) w3.style.cssText = `position:absolute;width:${s3}px;height:${s3}px;left:${wx + ww * 0.02}px;top:${wy + wh * 0.38}px;overflow:hidden;`;
+      if (w3) w3.style.cssText = `position:absolute;width:${s3}px;height:${s3}px;left:${wx + ww * 0.04}px;top:${wy + wh * 0.40}px;overflow:hidden;`;
     }
 
     function setDetectHUD(found) {
