@@ -1,1897 +1,1985 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Through The Looking Glass — Hermès</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Manrope:wght@300;400;500;600&display=swap"
-    rel="stylesheet">
-  <style>
-    :root {
-      --orange: #E8601C;
-      --orange-light: #F07840;
-      --orange-pale: #FDF0E8;
-      --cream: #FAF8F4;
-      --ivory: #F5F2EC;
-      --warm-white: #FFFDF9;
-      --brown: #3A2A1C;
-      --brown-mid: #6B4C35;
-      --taupe: #A08060;
-      --taupe-light: #C8AD96;
-      --border: rgba(58, 42, 28, 0.12);
-      --border-strong: rgba(58, 42, 28, 0.25);
-      --shadow: 0 2px 20px rgba(58, 42, 28, 0.08);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Through The Looking Glass — Hermès</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─── ROOT ─── */
+:root {
+  --orange: #E8601C;
+  --orange-light: #F07840;
+  --orange-pale: #FDF0E8;
+  --cream: #FAF8F4;
+  --ivory: #F5F2EC;
+  --warm-white: #FFFDF9;
+  --brown: #3A2A1C;
+  --brown-mid: #6B4C35;
+  --taupe: #A08060;
+  --taupe-light: #C8AD96;
+  --border: rgba(58,42,28,0.12);
+  --border-strong: rgba(58,42,28,0.25);
+  --shadow: 0 2px 20px rgba(58,42,28,0.08);
+}
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { font-size:16px; }
 
-    html {
-      font-size: 16px;
-    }
+body {
+  font-family:'Manrope', sans-serif;
+  background: var(--cream);
+  color: var(--brown);
+  height: 100dvh;
+  overflow: hidden;  /* body never scrolls — pages manage their own inner scroll */
+  overscroll-behavior: none;
+}
 
-    body {
-      font-family: 'Manrope', sans-serif;
-      background: var(--cream);
-      color: var(--brown);
-      height: 100dvh;
-      overflow: hidden;
-      overscroll-behavior: none;
-    }
+/* ─── PAGE SYSTEM ─── */
+.page {
+  display: none;
+  height: 100dvh;
+  flex-direction: column;
+  background: var(--cream);
+  overflow: hidden;
+  overscroll-behavior: none;
+  animation: pageFadeIn 0.35s ease forwards;
+}
+.page.active { display: flex; }
 
-    .page {
-      display: none;
-      height: 100dvh;
-      flex-direction: column;
-      background: var(--cream);
-      overflow: hidden;
-      overscroll-behavior: none;
-      animation: pageFadeIn 0.35s ease forwards;
-    }
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-    .page.active {
-      display: flex;
-    }
+/* ─── NAV ─── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(250,248,244,0.88);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 0.5px solid rgba(58,42,28,0.1);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  flex-shrink: 0;
+}
 
-    @keyframes pageFadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .nav {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: rgba(250, 248, 244, 0.88);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      border-bottom: 0.5px solid rgba(58, 42, 28, 0.1);
-      padding: 0 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 52px;
-      flex-shrink: 0;
-    }
-
-    /* .nav-brand {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 15px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--brown);
-      font-weight: 400;
-      text-decoration: none;
-    } */
-
-    .nav-logo {
+.nav-logo {
       height: 25px;
       width: auto;
       display: block;
       object-fit: contain;
     }
 
-    .nav-links {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-
-    .nav-btn {
-      font-family: 'Manrope', sans-serif;
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--taupe);
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px 10px;
-      transition: color 0.25s;
-      font-weight: 400;
-    }
-
-    .nav-btn:hover,
-    .nav-btn.active {
-      color: var(--orange);
-    }
-
-    .nav-btn.active {
-      font-weight: 500;
-      border-bottom: 1.5px solid var(--orange);
-    }
-
-    .home-hero {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .home-spacer {
-      flex: 1;
-    }
-
-    .home-bottom {
-      padding: 0 15px 30px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .home-top {
-      padding: 28px 28px 0;
-      position: relative;
-      z-index: 2;
-    }
-
-    .home-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(52px, 17vw, 80px);
-      font-weight: 300;
-      line-height: 0.95;
-      letter-spacing: -0.01em;
-      color: var(--brown);
-    }
-
-    .home-title em {
-      font-style: italic;
-      color: var(--orange);
-    }
-
-    .home-subtitle {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 16px;
-      font-style: italic;
-      color: var(--taupe);
-      margin-bottom: 28px;
-      letter-spacing: 0.02em;
-    }
-
-    .cta-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-      padding: 17px 24px;
-      background: var(--orange);
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-family: 'Manrope', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      border-radius: 14px;
-      transition: transform 0.15s ease, box-shadow 0.2s ease;
-      box-shadow: 0 4px 20px rgba(232, 96, 28, 0.35);
-    }
-
-    .cta-btn:active {
-      transform: scale(0.97);
-      box-shadow: 0 2px 10px rgba(232, 96, 28, 0.2);
-    }
-
-    .cta-icon {
-      width: 20px;
-      height: 20px;
-      border: 2px solid white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 10px;
-    }
-
-    .camera-page {
-      background: #111;
-      display: flex;
-      flex-direction: column;
-      height: 100dvh;
-      overflow: hidden;
-    }
-
-    .camera-page .nav {
-      flex-shrink: 0;
-      position: relative;
-      top: auto;
-    }
-
-    .camera-viewport {
-      position: relative;
-      flex: 1;
-      min-height: 0;
-      background: #0A0A0A;
-      overflow: hidden;
-    }
-
-    #cameraVideo {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 1;
-    }
-
-    #arCanvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    .hud-detect {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 3px;
-    }
-
-    .hud-detect-label {
-      font-size: 8px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.4);
-    }
-
-    .hud-detect-val {
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.4);
-      transition: color 0.4s;
-    }
-
-    .hud-detect-val.found {
-      color: var(--orange);
-    }
-
-    #scanHint {
-      position: absolute;
-      bottom: 112px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.75);
-      white-space: nowrap;
-      pointer-events: none;
-      z-index: 25;
-      transition: opacity 0.5s;
-      animation: hintFade 3s ease-in-out infinite;
-      background: rgba(20, 20, 20, 0.55);
-      backdrop-filter: blur(24px) saturate(160%);
-      -webkit-backdrop-filter: blur(24px) saturate(160%);
-      border: 0.5px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-      padding: 8px 18px;
-      border-radius: 20px;
-    }
-
-    @keyframes hintFade {
-
-      0%,
-      100% {
-        opacity: 0.35;
-      }
-
-      50% {
-        opacity: 0.8;
-      }
-    }
-
-    #glbOverlay {
-      position: absolute;
-      inset: 0;
-      z-index: 4;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 1s ease;
-    }
-
-    #glbOverlay.visible {
-      opacity: 1;
-    }
-
-    .glb-wrap {
-      position: absolute;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .glb-wrap iframe {
-      width: 100%;
-      height: 108%;
-      border: none;
-      background: transparent;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-
-    @keyframes birdFloat1 {
-
-      0%,
-      100% {
-        transform: translate(0px, 0px) rotate(0deg);
-      }
-
-      25% {
-        transform: translate(14px, -16px) rotate(2.5deg);
-      }
-
-      50% {
-        transform: translate(-6px, -26px) rotate(-1.5deg);
-      }
-
-      75% {
-        transform: translate(8px, -12px) rotate(1deg);
-      }
-    }
-
-    @keyframes birdFloat2 {
-
-      0%,
-      100% {
-        transform: translate(0px, 0px) rotate(0deg);
-      }
-
-      33% {
-        transform: translate(-12px, -20px) rotate(-2deg);
-      }
-
-      66% {
-        transform: translate(16px, -8px) rotate(1.5deg);
-      }
-    }
-
-    @keyframes birdFloat3 {
-
-      0%,
-      100% {
-        transform: translate(0px, 0px) rotate(0deg);
-      }
-
-      40% {
-        transform: translate(10px, -22px) rotate(2deg);
-      }
-
-      80% {
-        transform: translate(-14px, -10px) rotate(-2deg);
-      }
-    }
-
-    @keyframes birdFloat4 {
-
-      0%,
-      100% {
-        transform: translate(0px, 0px) rotate(0deg);
-      }
-
-      20% {
-        transform: translate(-8px, -18px) rotate(-1deg);
-      }
-
-      55% {
-        transform: translate(18px, -24px) rotate(2deg);
-      }
-
-      80% {
-        transform: translate(4px, -10px) rotate(-0.5deg);
-      }
-    }
-
-    @keyframes birdFloat5 {
-
-      0%,
-      100% {
-        transform: translate(0px, 0px) rotate(0deg);
-      }
-
-      30% {
-        transform: translate(10px, -28px) rotate(1.5deg);
-      }
-
-      60% {
-        transform: translate(-16px, -14px) rotate(-2.5deg);
-      }
-    }
-
-    .ar-object {
-      position: absolute;
-      cursor: pointer;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-      transform: translate(-50%, -50%);
-      z-index: 5;
-    }
-
-    .ar-object.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .ar-obj-ring {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 44px;
-      height: 44px;
-      border: 1.5px solid rgba(232, 96, 28, 0.65);
-      border-radius: 50%;
-      animation: objPulse 2.8s ease-in-out infinite;
-    }
-
-    .ar-obj-ring:nth-child(2) {
-      width: 26px;
-      height: 26px;
-      border-color: rgba(232, 96, 28, 0.4);
-      animation-delay: -1s;
-    }
-
-    @keyframes objPulse {
-
-      0%,
-      100% {
-        opacity: 0.35;
-        transform: translate(-50%, -50%) scale(1);
-      }
-
-      50% {
-        opacity: 0.9;
-        transform: translate(-50%, -50%) scale(1.08);
-      }
-    }
-
-    .ar-obj-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--orange);
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      box-shadow: 0 0 8px rgba(232, 96, 28, 0.7);
-      z-index: 1;
-    }
-
-    .product-popup {
-      position: absolute;
-      bottom: 16px;
-      left: 12px;
-      right: 12px;
-      background: rgba(252, 250, 247, 0.92);
-      backdrop-filter: blur(28px) saturate(180%);
-      -webkit-backdrop-filter: blur(28px) saturate(180%);
-      color: var(--brown);
-      padding: 20px;
-      display: none;
-      animation: popupIn 0.28s cubic-bezier(0.32, 0.72, 0, 1) forwards;
-      border-radius: 20px;
-      border: 0.5px solid rgba(255, 255, 255, 0.6);
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.25);
-    }
-
-    .product-popup.visible {
-      display: block;
-    }
-
-    @keyframes popupIn {
-      from {
-        opacity: 0;
-        transform: translateY(16px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .popup-close {
-      position: absolute;
-      top: 12px;
-      right: 14px;
-      background: none;
-      border: none;
-      font-size: 18px;
-      color: var(--taupe);
-      cursor: pointer;
-      line-height: 1;
-    }
-
-    .popup-tag {
-      font-size: 9px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: 6px;
-    }
-
-    .popup-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
-      font-weight: 400;
-      color: var(--brown);
-      margin-bottom: 10px;
-    }
-
-    .popup-desc {
-      font-size: 12px;
-      line-height: 1.75;
-      color: var(--brown-mid);
-      margin-bottom: 14px;
-    }
-
-    .popup-meta {
-      display: flex;
-      gap: 16px;
-    }
-
-    .popup-meta-item {
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--taupe);
-    }
-
-    .popup-meta-item strong {
-      display: block;
-      color: var(--brown);
-      font-weight: 500;
-      margin-top: 2px;
-      font-size: 11px;
-    }
-
-    .camera-controls {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 96px;
-      background: transparent;
-      border-top: none;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      padding: 0 28px;
-      padding-bottom: env(safe-area-inset-bottom, 0px);
-      z-index: 20;
-    }
-
-    .cam-ctrl-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-
-    .cam-ctrl-btn:active {
-      opacity: 0.6;
-    }
-
-    .cam-ctrl-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: rgba(20, 20, 20, 0.55);
-      backdrop-filter: blur(24px) saturate(160%);
-      -webkit-backdrop-filter: blur(24px) saturate(160%);
-      border: 0.5px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      transition: all 0.25s ease;
-      color: white;
-    }
-
-    .cam-ctrl-btn.ctrl-active .cam-ctrl-icon {
-      background: rgba(232, 96, 28, 0.45);
-      border-color: rgba(232, 96, 28, 0.5);
-      box-shadow: 0 4px 20px rgba(232, 96, 28, 0.35);
-      color: white;
-    }
-
-    .cam-ctrl-label {
-      font-family: 'Manrope', sans-serif;
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.5);
-    }
-
-    .camera-hud {
-      position: absolute;
-      top: 14px;
-      left: 14px;
-      right: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      pointer-events: none;
-      z-index: 10;
-      background: rgba(20, 20, 20, 0.55);
-      backdrop-filter: blur(24px) saturate(160%);
-      -webkit-backdrop-filter: blur(24px) saturate(160%);
-      border: 0.5px solid rgba(255, 255, 255, 0.12);
-      border-radius: 14px;
-      padding: 10px 16px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-    }
-
-    .hud-status {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .hud-live {
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--orange);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .hud-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--orange);
-      animation: livePulse 1.5s ease-in-out infinite;
-    }
-
-    @keyframes livePulse {
-
-      0%,
-      100% {
-        opacity: 0.5;
-      }
-
-      50% {
-        opacity: 1;
-      }
-    }
-
-    .hud-time {
-      font-size: 9px;
-      color: rgba(255, 255, 255, 0.4);
-      letter-spacing: 0.1em;
-    }
-
-    .info-modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 200;
-      background: rgba(26, 18, 12, 0.6);
-      backdrop-filter: blur(4px);
-      align-items: flex-end;
-    }
-
-    .info-modal.open {
-      display: flex;
-    }
-
-    .info-sheet {
-      background: rgba(252, 250, 247, 0.98);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      width: 100%;
-      max-height: 88dvh;
-      border-radius: 20px 20px 0 0;
-      overflow-y: auto;
-      padding: 12px 24px 48px;
-      animation: sheetUp 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-    }
-
-    @keyframes sheetUp {
-      from {
-        transform: translateY(100%);
-      }
-
-      to {
-        transform: translateY(0);
-      }
-    }
-
-    .sheet-handle {
-      width: 36px;
-      height: 4px;
-      background: var(--border-strong);
-      border-radius: 2px;
-      margin: 0 auto 24px;
-    }
-
-    .sheet-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 26px;
-      font-weight: 400;
-      color: var(--brown);
-      margin-bottom: 4px;
-    }
-
-    .sheet-subtitle {
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: 28px;
-    }
-
-    .info-step {
-      display: flex;
-      gap: 16px;
-      padding: 18px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .info-step:last-child {
-      border-bottom: none;
-    }
-
-    .step-num {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 32px;
-      font-weight: 300;
-      color: rgba(232, 96, 28, 0.2);
-      line-height: 1;
-      flex-shrink: 0;
-      width: 36px;
-    }
-
-    .step-title {
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--brown);
-      font-weight: 500;
-      margin-bottom: 6px;
-    }
-
-    .step-body {
-      font-size: 13px;
-      line-height: 1.8;
-      color: var(--brown-mid);
-    }
-
-    .sheet-close {
-      margin-top: 24px;
-      width: 100%;
-      padding: 16px;
-      background: var(--orange);
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-family: 'Manrope', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      border-radius: 14px;
-      box-shadow: 0 4px 16px rgba(232, 96, 28, 0.3);
-      transition: transform 0.15s ease;
-    }
-
-    .sheet-close:active {
-      transform: scale(0.98);
-    }
-
-    .story-page {
-      background: var(--cream);
-      height: 100dvh;
-      overflow: hidden;
-    }
-
-    .story-page>div {
-      flex: 1;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .story-hero {
-      padding: 36px 28px 32px;
-      border-bottom: 1px solid var(--border);
-      background: var(--ivory);
-    }
-
-    .story-season {
-      font-size: 10px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .story-season::before {
-      content: '';
-      width: 20px;
-      height: 1px;
-      background: var(--orange);
-    }
-
-    .story-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(36px, 10vw, 56px);
-      font-weight: 300;
-      line-height: 1;
-      letter-spacing: -0.01em;
-      color: var(--brown);
-      margin-bottom: 8px;
-    }
-
-    .story-title em {
-      font-style: italic;
-      color: var(--orange);
-    }
-
-    .story-artist-line {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 15px;
-      font-style: italic;
-      color: var(--taupe);
-      margin-bottom: 24px;
-    }
-
-    .story-window-wrap {
-      position: relative;
-      aspect-ratio: 4/3;
-      background: var(--brown);
-      overflow: hidden;
-      margin-bottom: 28px;
-    }
-
-    .story-window-scene {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #2a1f12 0%, #1a120a 60%, #2d1e0e 100%);
-    }
-
-    .story-win-scarf {
-      position: absolute;
-      top: 38%;
-      left: 8%;
-      width: 84%;
-      height: 4px;
-      background: linear-gradient(90deg, transparent, var(--orange), #F5A570, var(--orange-light), var(--orange), transparent);
-      transform: rotate(-5deg);
-      box-shadow: 0 0 20px rgba(232, 96, 28, 0.4);
-      animation: scarfDrift 6s ease-in-out infinite;
-    }
-
-    @keyframes scarfDrift {
-
-      0%,
-      100% {
-        transform: rotate(-5deg) translateY(0);
-      }
-
-      50% {
-        transform: rotate(-3deg) translateY(-6px);
-      }
-    }
-
-    .story-win-particles {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .story-artist-card {
-      display: flex;
-      gap: 14px;
-      align-items: center;
-      padding: 16px 18px;
-      background: white;
-      border-radius: 14px;
-      box-shadow: 0 1px 8px rgba(58, 42, 28, 0.07);
-    }
-
-    .artist-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--orange-pale), var(--orange));
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 16px;
-      color: white;
-      font-style: italic;
-    }
-
-    .artist-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 17px;
-      font-weight: 400;
-      color: var(--brown);
-    }
-
-    .artist-role {
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--taupe);
-      margin-top: 2px;
-    }
-
-    .story-concept {
-      padding: 32px 28px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .section-label {
-      font-size: 10px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--taupe);
-      margin-bottom: 16px;
-    }
-
-    .concept-quote {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 21px;
-      font-weight: 300;
-      font-style: italic;
-      line-height: 1.55;
-      color: var(--brown);
-      border-left: 2px solid var(--orange);
-      padding-left: 20px;
-      margin-bottom: 20px;
-    }
-
-    .concept-body {
-      font-size: 13px;
-      line-height: 1.85;
-      color: var(--brown-mid);
-    }
-
-    .story-keepsakes {
-      padding: 32px 28px;
-    }
-
-    .keepsakes-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 24px;
-      font-weight: 300;
-      color: var(--brown);
-      margin-bottom: 4px;
-    }
-
-    .keepsakes-sub {
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--taupe);
-      margin-bottom: 24px;
-    }
-
-    .keepsakes-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .keepsake-card {
-      border: none;
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      cursor: pointer;
-      box-shadow: 0 2px 12px rgba(58, 42, 28, 0.08);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .keepsake-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(58, 42, 28, 0.14);
-    }
-
-    .keepsake-preview {
-      aspect-ratio: 3/4;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .kp-bg-1 {
-      background: linear-gradient(135deg, #FAF0E8 0%, #F5E0C8 100%);
-    }
-
-    .kp-bg-2 {
-      background: linear-gradient(135deg, #F0EAE2 0%, #E8D8C4 100%);
-    }
-
-    .kp-bg-3 {
-      background: linear-gradient(135deg, #FDF4EE 0%, #F8E8D8 100%);
-      grid-column: span 2;
-      aspect-ratio: 2/1;
-    }
-
-    .kp-anim-scarf {
-      position: absolute;
-      top: 50%;
-      left: 10%;
-      width: 80%;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, var(--orange), #F5A570, var(--orange), transparent);
-      transform: translateY(-50%) rotate(-8deg);
-      animation: scarfDrift 5s ease-in-out infinite;
-      box-shadow: 0 0 12px rgba(232, 96, 28, 0.3);
-    }
-
-    .kp-anim-window {
-      position: absolute;
-      inset: 15%;
-      border: 1px solid rgba(232, 96, 28, 0.25);
-    }
-
-    .kp-anim-window::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at center, rgba(232, 96, 28, 0.08) 0%, transparent 70%);
-      animation: winGlow 4s ease-in-out infinite;
-    }
-
-    @keyframes winGlow {
-
-      0%,
-      100% {
-        opacity: 0.5;
-      }
-
-      50% {
-        opacity: 1;
-      }
-    }
-
-    .kp-anim-loop {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .kp-loop-line {
-      width: 70%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--orange), transparent);
-      animation: loopAnim 3s ease-in-out infinite;
-    }
-
-    @keyframes loopAnim {
-
-      0%,
-      100% {
-        transform: scaleX(0.8) rotate(-5deg);
-        opacity: 0.6;
-      }
-
-      50% {
-        transform: scaleX(1.1) rotate(-3deg);
-        opacity: 1;
-      }
-    }
-
-    .kp-label {
-      padding: 12px 14px;
-      border-top: 1px solid var(--border);
-    }
-
-    .kp-type {
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: 3px;
-    }
-
-    .kp-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 15px;
-      font-style: italic;
-      color: var(--brown);
-      margin-bottom: 8px;
-    }
-
-    .kp-dl-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      color: var(--orange);
-      cursor: pointer;
-      background: rgba(232, 96, 28, 0.08);
-      border: none;
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-family: 'Manrope', sans-serif;
-      transition: background 0.2s ease, transform 0.15s ease;
-    }
-
-    .kp-dl-btn:hover {
-      background: rgba(232, 96, 28, 0.14);
-    }
-
-    .kp-dl-btn:active {
-      transform: scale(0.96);
-    }
-
-    .kp-dl-icon {
-      width: 20px;
-      height: 20px;
-      border: 1px solid var(--orange);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      color: var(--orange);
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 32px;
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: rgba(30, 20, 14, 0.88);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      color: white;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.01em;
-      padding: 11px 20px;
-      border-radius: 24px;
-      white-space: nowrap;
-      border: 0.5px solid rgba(255, 255, 255, 0.12);
-      transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
-      z-index: 999;
-      font-family: 'Manrope', sans-serif;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-    }
-
-    @media(min-width:600px) {
-      .home-top {
-        padding: 52px 48px 0;
-      }
-
-      .cta-btn {
-        width: calc(100% - 96px);
-        margin: 0 48px 36px;
-      }
-
-      .nav {
-        padding: 0 40px;
-      }
-
-      nav .nav-btn {
-        padding: 8px 14px;
-        font-size: 11px;
-      }
-
-      .story-hero {
-        padding: 48px 48px 40px;
-      }
-
-      .story-concept {
-        padding: 40px 48px;
-      }
-
-      .story-keepsakes {
-        padding: 40px 48px;
-      }
-
-      .keepsakes-grid {
-        grid-template-columns: 1fr 1fr 1fr;
-      }
-
-      .keepsake-card:nth-child(3) {
-        grid-column: span 1;
-        aspect-ratio: 3/4;
-      }
-
-      .kp-bg-3 {
-        aspect-ratio: 3/4;
-      }
-
-      .kp-anim-loop {
-        align-items: center;
-      }
-
-      .home-desc {
-        max-width: 460px;
-      }
-
-      .popup-name {
-        font-size: 26px;
-      }
-
-      .info-sheet {
-        padding: 32px 40px 60px;
-      }
-
-      .camera-hud {
-        padding: 0 8px;
-      }
-    }
-
-    @media(min-width:768px) {
-      .home-top {
-        padding: 60px 60px 0;
-      }
-
-      .cta-btn {
-        max-width: 380px;
-        margin-left: 60px;
-      }
-
-      .nav-btn {
-        font-size: 12px;
-      }
-    }
-
-    .camera-page {
-      overflow: hidden;
-      height: 100dvh;
-    }
-  </style>
+.nav-links {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.nav-btn {
+  font-family: 'Manrope', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 10px;
+  transition: color 0.25s;
+  font-weight: 400;
+}
+.nav-btn:hover, .nav-btn.active { color: var(--orange); }
+.nav-btn.active { font-weight: 500; border-bottom: 1.5px solid var(--orange); }
+
+/* ─── ─── ─── HOME PAGE ─── ─── ─── */
+.home-hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Spacer that grows to push button to vertical center */
+.home-spacer {
+  flex: 1;
+}
+
+.home-bottom {
+  padding: 0 15px;
+  padding-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.home-bottom-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  text-align: center;
+}
+
+.home-top {
+  padding: 28px 28px 0px;
+  position: relative;
+  z-index: 2;
+}
+
+.home-label {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.home-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--orange);
+  display: block;
+}
+
+.home-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(52px, 17vw, 80px);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  color: var(--brown);
+  /* margin-bottom: 6px; */
+}
+.home-title em {
+  font-style: italic;
+  color: var(--orange);
+}
+
+.home-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--taupe);
+  margin-bottom: 28px;
+  letter-spacing: 0.02em;
+}
+
+.home-desc {
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--brown-mid);
+  letter-spacing: 0.02em;
+  max-width: 380px;
+  margin-bottom: 36px;
+}
+
+/* CTA Button */
+.cta-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 17px 24px;
+  background: var(--orange);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: 14px;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(232,96,28,0.35);
+}
+.cta-btn:active { transform: scale(0.97); box-shadow: 0 2px 10px rgba(232,96,28,0.2); }
+
+.cta-icon {
+  width: 20px; height: 20px;
+  border: 2px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 10px;
+}
+
+/* home-features removed */
+
+
+/* ─── ─── ─── CAMERA PAGE ─── ─── ─── */
+.camera-page {
+  background: #111;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* The nav on this page is NOT sticky — part of the flex column */
+.camera-page .nav {
+  flex-shrink: 0;
+  position: relative;
+  top: auto;
+}
+
+.camera-viewport {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  background: #0A0A0A;
+  overflow: hidden;
+  /* Now fills all height — controls float over the top via absolute positioning */
+}
+
+#cameraVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* AR canvas sits above video — all overlays drawn here */
+#arCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Detection status HUD */
+.hud-detect { display:flex; flex-direction:column; align-items:flex-end; gap:3px; }
+.hud-detect-label { font-size:8px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.4); }
+.hud-detect-val { font-size:9px; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.4); transition:color 0.4s; }
+.hud-detect-val.found { color:var(--orange); }
+
+/* Scan hint — sits just above the floating control buttons */
+#scanHint {
+  position:absolute; bottom:112px; left:50%;
+  transform:translateX(-50%);
+  font-size:10px; letter-spacing:0.2em; text-transform:uppercase;
+  color:rgba(255,255,255,0.75); white-space:nowrap;
+  pointer-events:none; z-index:25; transition:opacity 0.5s;
+  animation:hintFade 3s ease-in-out infinite;
+  background:rgba(20,20,20,0.55);
+  backdrop-filter:blur(24px) saturate(160%);
+  -webkit-backdrop-filter:blur(24px) saturate(160%);
+  border:0.5px solid rgba(255,255,255,0.12);
+  box-shadow:0 4px 16px rgba(0,0,0,0.3);
+  padding:8px 18px;
+  border-radius:20px;
+}
+@keyframes hintFade { 0%,100%{opacity:0.35;} 50%{opacity:0.8;} }
+
+/* Shared active state for toggle buttons */
+.cam-ctrl-btn.ctrl-active .cam-ctrl-icon {
+  border-color:rgba(232,96,28,0.6);
+  background:rgba(232,96,28,0.12);
+  color:var(--orange);
+}
+
+/* AR overlay drawn on #arCanvas — see JS */
+
+/* Bird animation drawn on #birdCanvas — see drawBirds() in JS */
+#birdCanvas { /* shown/hidden via opacity transition in JS */ }
+
+/* model-viewer GLB overlays — positioned by JS over detected window */
+#glbOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;          /* above birdCanvas */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+#glbOverlay.visible { opacity: 1; }
+
+.glb-wrap {
+  position: absolute;
+  pointer-events: none;
+}
+
+.glb-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+}
+
+/* Each model-viewer floats with its own drift animation */
+#mv1 { animation: birdFloat1 8s ease-in-out infinite; }
+#mv2 { animation: birdFloat2 11s ease-in-out infinite; }
+#mv3 { animation: birdFloat3 9.5s ease-in-out infinite; }
+
+@keyframes birdFloat1 {
+  0%,100% { transform: translate(0px, 0px) rotate(0deg); }
+  25%     { transform: translate(12px, -14px) rotate(2deg); }
+  50%     { transform: translate(-8px, -22px) rotate(-1deg); }
+  75%     { transform: translate(6px, -10px) rotate(1.5deg); }
+}
+@keyframes birdFloat2 {
+  0%,100% { transform: translate(0px, 0px) rotate(0deg); }
+  33%     { transform: translate(-10px, -18px) rotate(-2deg); }
+  66%     { transform: translate(14px, -8px) rotate(1deg); }
+}
+@keyframes birdFloat3 {
+  0%,100% { transform: translate(0px, 0px) rotate(0deg); }
+  40%     { transform: translate(8px, -20px) rotate(1.5deg); }
+  80%     { transform: translate(-12px, -12px) rotate(-1.5deg); }
+}
+
+/* ─── AR OBJECTS ─── */
+/* Positioned absolutely by JS over the detected window; hidden until Info toggled on */
+.ar-object {
+  position: absolute;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+.ar-object.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* Outer ring */
+.ar-obj-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px; height: 44px;
+  border: 1.5px solid rgba(232,96,28,0.65);
+  border-radius: 50%;
+  animation: objPulse 2.8s ease-in-out infinite;
+}
+/* Inner ring */
+.ar-obj-ring:nth-child(2) {
+  width: 26px; height: 26px;
+  border-color: rgba(232,96,28,0.4);
+  animation-delay: -1s;
+}
+@keyframes objPulse {
+  0%,100% { opacity:0.35; transform:translate(-50%,-50%) scale(1); }
+  50%      { opacity:0.9;  transform:translate(-50%,-50%) scale(1.08); }
+}
+.ar-obj-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--orange);
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 8px rgba(232,96,28,0.7);
+  z-index: 1;
+}
+
+/* Product card popup */
+.product-popup {
+  position: absolute;
+  bottom: 16px;
+  left: 12px; right: 12px;
+  background: rgba(252,250,247,0.92);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  color: var(--brown);
+  padding: 20px;
+  display: none;
+  animation: popupIn 0.28s cubic-bezier(0.32,0.72,0,1) forwards;
+  border-radius: 20px;
+  border: 0.5px solid rgba(255,255,255,0.6);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+}
+.product-popup.visible { display: block; }
+
+@keyframes popupIn {
+  from { opacity:0; transform:translateY(16px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+.popup-close {
+  position: absolute;
+  top: 12px; right: 14px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--taupe);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.popup-tag {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 6px;
+}
+
+.popup-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--brown);
+  margin-bottom: 10px;
+}
+
+.popup-desc {
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--brown-mid);
+  margin-bottom: 14px;
+}
+
+.popup-meta {
+  display: flex;
+  gap: 16px;
+}
+
+.popup-meta-item {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--taupe);
+}
+
+.popup-meta-item strong {
+  display: block;
+  color: var(--brown);
+  font-weight: 500;
+  margin-top: 2px;
+  font-size: 11px;
+}
+
+/* Camera controls — floats over the live view, no background panel */
+.camera-controls {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 96px;
+  background: transparent;          /* no panel — camera goes edge to edge */
+  border-top: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 28px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  z-index: 20;
+}
+
+.cam-ctrl-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.cam-ctrl-btn:active { opacity: 0.6; }
+
+.cam-ctrl-icon {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  /* Same frosted glass treatment as the HUD pill */
+  background: rgba(20,20,20,0.55);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 0.5px solid rgba(255,255,255,0.12);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: all 0.25s ease;
+  color: white;
+}
+
+/* Active state — orange tint fill, same glass base */
+.cam-ctrl-btn.ctrl-active .cam-ctrl-icon {
+  background: rgba(232,96,28,0.45);
+  border-color: rgba(232,96,28,0.5);
+  box-shadow: 0 4px 20px rgba(232,96,28,0.35);
+  color: white;
+}
+
+.cam-ctrl-label {
+  font-family: 'Manrope', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+
+/* Camera overlay HUD — iOS live activity style pill */
+.camera-hud {
+  position: absolute;
+  top: 14px; left: 14px; right: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  z-index: 10;
+  background: rgba(20,20,20,0.55);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 0.5px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 10px 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.hud-status {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hud-live {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.hud-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--orange);
+  animation: livePulse 1.5s ease-in-out infinite;
+}
+@keyframes livePulse {
+  0%,100% { opacity:0.5; }
+  50% { opacity:1; }
+}
+
+.hud-time {
+  font-size: 9px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.1em;
+}
+
+.hud-prox-label {
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 3px;
+}
+
+.hud-prox-bar {
+  width: 60px;
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.hud-prox-fill {
+  height: 100%;
+  background: var(--orange);
+  border-radius: 2px;
+  animation: proxPulse 4s ease-in-out infinite;
+}
+@keyframes proxPulse {
+  0%,100% { width:35%; }
+  50% { width:72%; }
+}
+
+/* Info Modal */
+.info-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(26,18,12,0.6);
+  backdrop-filter: blur(4px);
+  align-items: flex-end;
+}
+.info-modal.open { display: flex; }
+
+.info-sheet {
+  background: rgba(252,250,247,0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  width: 100%;
+  max-height: 88dvh;
+  border-radius: 20px 20px 0 0;
+  overflow-y: auto;
+  padding: 12px 24px 48px;
+  animation: sheetUp 0.3s cubic-bezier(0.32,0.72,0,1);
+}
+@keyframes sheetUp {
+  from { transform:translateY(100%); }
+  to { transform:translateY(0); }
+}
+
+.sheet-handle {
+  width: 36px; height: 4px;
+  background: var(--border-strong);
+  border-radius: 2px;
+  margin: 0 auto 24px;
+}
+
+.sheet-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--brown);
+  margin-bottom: 4px;
+}
+
+.sheet-subtitle {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 28px;
+}
+
+.info-step {
+  display: flex;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.info-step:last-child { border-bottom: none; }
+
+.step-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 300;
+  color: rgba(232,96,28,0.2);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 36px;
+}
+
+.step-title {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--brown);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.step-body {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--brown-mid);
+}
+
+.sheet-close {
+  margin-top: 24px;
+  width: 100%;
+  padding: 16px;
+  background: var(--orange);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(232,96,28,0.3);
+  transition: transform 0.15s ease;
+}
+.sheet-close:active { transform: scale(0.98); }
+
+
+/* ─── ─── ─── STORY PAGE ─── ─── ─── */
+.story-page {
+  background: var(--cream);
+  height: 100dvh;
+  overflow: hidden;
+}
+.story-page > div {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.story-hero {
+  padding: 36px 28px 32px;
+  border-bottom: 1px solid var(--border);
+  background: var(--ivory);
+}
+
+.story-season {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.story-season::before {
+  content: '';
+  width: 20px; height: 1px;
+  background: var(--orange);
+}
+
+.story-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 10vw, 56px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--brown);
+  margin-bottom: 8px;
+}
+.story-title em { font-style: italic; color: var(--orange); }
+
+.story-artist-line {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-style: italic;
+  color: var(--taupe);
+  margin-bottom: 24px;
+}
+
+.story-window-wrap {
+  position: relative;
+  aspect-ratio: 4/3;
+  background: var(--brown);
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+
+.story-window-scene {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #2a1f12 0%, #1a120a 60%, #2d1e0e 100%);
+}
+
+.story-win-scarf {
+  position: absolute;
+  top: 38%; left: 8%;
+  width: 84%;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, var(--orange), #F5A570, var(--orange-light), var(--orange), transparent);
+  transform: rotate(-5deg);
+  box-shadow: 0 0 20px rgba(232,96,28,0.4);
+  animation: scarfDrift 6s ease-in-out infinite;
+}
+
+@keyframes scarfDrift {
+  0%,100% { transform:rotate(-5deg) translateY(0); }
+  50% { transform:rotate(-3deg) translateY(-6px); }
+}
+
+.story-win-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.story-artist-card {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 16px 18px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 1px 8px rgba(58,42,28,0.07);
+}
+
+.artist-avatar {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange-pale), var(--orange));
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  color: white;
+  font-style: italic;
+}
+
+.artist-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--brown);
+}
+.artist-role {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin-top: 2px;
+}
+
+.story-concept {
+  padding: 32px 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-label {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin-bottom: 16px;
+}
+
+.concept-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 21px;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--brown);
+  border-left: 2px solid var(--orange);
+  padding-left: 20px;
+  margin-bottom: 20px;
+}
+
+.concept-body {
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--brown-mid);
+}
+
+.story-keepsakes {
+  padding: 32px 28px;
+}
+
+.keepsakes-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 300;
+  color: var(--brown);
+  margin-bottom: 4px;
+}
+.keepsakes-sub {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin-bottom: 24px;
+}
+
+.keepsakes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.keepsake-card {
+  border: none;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(58,42,28,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.keepsake-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(58,42,28,0.14);
+}
+
+.keepsake-preview {
+  aspect-ratio: 3/4;
+  position: relative;
+  overflow: hidden;
+}
+
+.kp-bg-1 { background: linear-gradient(135deg, #FAF0E8 0%, #F5E0C8 100%); }
+.kp-bg-2 { background: linear-gradient(135deg, #F0EAE2 0%, #E8D8C4 100%); }
+.kp-bg-3 {
+  background: linear-gradient(135deg, #FDF4EE 0%, #F8E8D8 100%);
+  grid-column: span 2;
+  aspect-ratio: 2/1;
+}
+
+.kp-anim-scarf {
+  position: absolute;
+  top: 50%; left: 10%;
+  width: 80%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--orange), #F5A570, var(--orange), transparent);
+  transform: translateY(-50%) rotate(-8deg);
+  animation: scarfDrift 5s ease-in-out infinite;
+  box-shadow: 0 0 12px rgba(232,96,28,0.3);
+}
+
+.kp-anim-window {
+  position: absolute;
+  inset: 15%;
+  border: 1px solid rgba(232,96,28,0.25);
+}
+.kp-anim-window::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(232,96,28,0.08) 0%, transparent 70%);
+  animation: winGlow 4s ease-in-out infinite;
+}
+@keyframes winGlow { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
+
+.kp-anim-loop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kp-loop-line {
+  width: 70%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--orange), transparent);
+  animation: loopAnim 3s ease-in-out infinite;
+}
+@keyframes loopAnim {
+  0%,100% { transform:scaleX(0.8) rotate(-5deg); opacity:0.6; }
+  50% { transform:scaleX(1.1) rotate(-3deg); opacity:1; }
+}
+
+.kp-label {
+  padding: 12px 14px;
+  border-top: 1px solid var(--border);
+}
+
+.kp-type {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 3px;
+}
+
+.kp-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-style: italic;
+  color: var(--brown);
+  margin-bottom: 8px;
+}
+
+.kp-dl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--orange);
+  cursor: pointer;
+  background: rgba(232,96,28,0.08);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-family: 'Manrope', sans-serif;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+.kp-dl-btn:hover { background: rgba(232,96,28,0.14); }
+.kp-dl-btn:active { transform: scale(0.96); }
+
+.kp-dl-icon {
+  width: 20px; height: 20px;
+  border: 1px solid var(--orange);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--orange);
+}
+
+/* Toast notification */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: rgba(30,20,14,0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  padding: 11px 20px;
+  border-radius: 24px;
+  white-space: nowrap;
+  border: 0.5px solid rgba(255,255,255,0.12);
+  transition: transform 0.4s cubic-bezier(0.32,0.72,0,1);
+  z-index: 999;
+  font-family: 'Manrope', sans-serif;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ─── TABLET BREAKPOINT ─── */
+@media (min-width: 600px) {
+  .home-top { padding: 52px 48px 0; }
+  .cta-btn { width: calc(100% - 96px); margin: 0 48px 36px; }
+  .nav { padding: 0 40px; }
+  nav .nav-btn { padding: 8px 14px; font-size: 11px; }
+  .story-hero { padding: 48px 48px 40px; }
+  .story-concept { padding: 40px 48px; }
+  .story-keepsakes { padding: 40px 48px; }
+  .keepsakes-grid { grid-template-columns: 1fr 1fr 1fr; }
+  .keepsake-card:nth-child(3) { grid-column: span 1; aspect-ratio: 3/4; }
+  .kp-bg-3 { aspect-ratio: 3/4; }
+  .kp-anim-loop { align-items: center; }
+  .home-desc { max-width: 460px; }
+  .popup-name { font-size: 26px; }
+  .info-sheet { padding: 32px 40px 60px; }
+  .camera-hud { padding: 0 8px; }
+}
+
+@media (min-width: 768px) {
+  .home-top { padding: 60px 60px 0; }
+  .cta-btn { max-width: 380px; margin-left: 60px; }
+  .nav-btn { font-size: 12px; }
+}
+
+/* Prevent scroll on camera page */
+.camera-page { overflow: hidden; height: 100dvh; }
+</style>
 </head>
-
 <body>
-  <div id="page-home" class="page active">
-    <nav class="nav">
-      <img src="./Hermès Logo.png" alt="Hermès" class="nav-logo">
 
-      <div class="nav-links">
-        <button class="nav-btn active" onclick="navigate('home')" data-page="home">Home</button>
-        <button class="nav-btn" onclick="navigate('camera')" data-page="camera">AR</button>
-        <button class="nav-btn" onclick="navigate('story')" data-page="story">Story</button>
+<!-- ═══════════════ HOME PAGE ═══════════════ -->
+<div id="page-home" class="page active">
+  <nav class="nav">
+    <img src="./hermeslogo.png" alt="Hermès" class="nav-logo">
+    <div class="nav-links">
+      <button class="nav-btn active" onclick="navigate('home')" data-page="home">Home</button>
+      <button class="nav-btn" onclick="navigate('camera')" data-page="camera">AR</button>
+      <button class="nav-btn" onclick="navigate('story')" data-page="story">Story</button>
+    </div>
+  </nav>
+
+  <div class="home-hero">
+    <!-- Top spacer: pushes button down from nav -->
+    <div class="home-spacer"></div>
+    <!-- Title: pinned to the bottom of the page -->
+    <div class="home-top">
+      <h1 class="home-title">Through<br><em>The Looking<br></em>Glass</h1>
+      <p class="home-subtitle">New York City · Spring · 2026</p>
+    </div>
+
+    <!-- Button: centered in the vertical space above the title -->
+    <div class="home-bottom">
+      <button class="cta-btn" onclick="navigate('camera')" data-page="camera">
+        <span class="cta-icon">⊙</span>
+        Open AR Camera
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CAMERA PAGE ═══════════════ -->
+<div id="page-camera" class="page camera-page">
+  <nav class="nav" style="background:rgba(10, 10, 10, 0.20);border-color:rgba(232,96,28,0.2);">
+    <img src="./hermeslogo.png" alt="Hermès" class="nav-logo">
+    <div class="nav-links">
+      <button class="nav-btn" onclick="navigate('home')" data-page="home" style="color:rgba(255,255,255,0.4);">Home</button>
+      <button class="nav-btn active" onclick="navigate('camera')" data-page="camera" style="color:var(--orange);border-bottom-color:var(--orange);">AR</button>
+      <button class="nav-btn" onclick="navigate('story')" data-page="story" style="color:rgba(255,255,255,0.4);">Story</button>
+    </div>
+  </nav>
+
+  <div class="camera-viewport">
+
+    <!-- Live camera feed -->
+    <video id="cameraVideo" autoplay playsinline muted></video>
+
+    <!-- AR canvas: corner brackets + particles drawn here -->
+    <canvas id="arCanvas"></canvas>
+
+    <!-- Ambient bird canvas: silhouette flight paths drawn here (z-index 3) -->
+    <canvas id="birdCanvas" style="position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;opacity:0;transition:opacity 0.8s ease;"></canvas>
+
+    <!-- GLB model-viewer overlay: plays embedded animation from birds.glb (z-index 4) -->
+   <div id="glbOverlay">
+      <div class="glb-wrap" id="mv1wrap">
+        <iframe
+          title="Birds"
+          frameborder="0"
+          allowfullscreen
+          mozallowfullscreen="true"
+          webkitallowfullscreen="true"
+          allow="autoplay; fullscreen; xr-spatial-tracking"
+          xr-spatial-tracking
+          execution-while-out-of-viewport
+          execution-while-not-rendered
+          web-share
+          src="https://sketchfab.com/models/8a45f757c17e4efb87684c91115b98d3/embed?autostart=1&transparent=1&ui_infos=0&ui_controls=0&ui_stop=0&ui_watermark=0&dnt=1">
+        </iframe>
       </div>
-    </nav>
-    <div class="home-hero">
-      <div class="home-spacer"></div>
-      <div class="home-top">
-        <h1 class="home-title">Through<br><em>The Looking<br></em>Glass</h1>
-        <p class="home-subtitle">New York City · Spring · 2026</p>
+      <div class="glb-wrap" id="mv2wrap">
+        <iframe
+          title="Birds"
+          frameborder="0"
+          allowfullscreen
+          mozallowfullscreen="true"
+          webkitallowfullscreen="true"
+          allow="autoplay; fullscreen; xr-spatial-tracking"
+          xr-spatial-tracking
+          execution-while-out-of-viewport
+          execution-while-not-rendered
+          web-share
+          src="https://sketchfab.com/models/8a45f757c17e4efb87684c91115b98d3/embed?autostart=1&transparent=1&ui_infos=0&ui_controls=0&ui_stop=0&ui_watermark=0&dnt=1">
+        </iframe>
       </div>
-      <div class="home-bottom">
-        <button class="cta-btn" onclick="navigate('camera')" data-page="camera"><span class="cta-icon">⊙</span>Open AR
-          Camera</button>
+      <div class="glb-wrap" id="mv3wrap">
+        <iframe
+          title="Birds"
+          frameborder="0"
+          allowfullscreen
+          mozallowfullscreen="true"
+          webkitallowfullscreen="true"
+          allow="autoplay; fullscreen; xr-spatial-tracking"
+          xr-spatial-tracking
+          execution-while-out-of-viewport
+          execution-while-not-rendered
+          web-share
+          src="https://sketchfab.com/models/8a45f757c17e4efb87684c91115b98d3/embed?autostart=1&transparent=1&ui_infos=0&ui_controls=0&ui_stop=0&ui_watermark=0&dnt=1">
+        </iframe>
+      </div>
+    </div>
+ 
+    <!-- Tappable product hotspots: positioned by JS over detected window, hidden until Info toggled on -->
+    <div class="ar-object" id="hs-scarf" onclick="showProduct('scarf')">
+      <div class="ar-obj-ring"></div>
+      <div class="ar-obj-ring"></div>
+      <div class="ar-obj-dot"></div>
+    </div>
+    <div class="ar-object" id="hs-bag" onclick="showProduct('bag')">
+      <div class="ar-obj-ring"></div>
+      <div class="ar-obj-ring"></div>
+      <div class="ar-obj-dot"></div>
+    </div>
+    <div class="ar-object" id="hs-silk" onclick="showProduct('silk')">
+      <div class="ar-obj-ring"></div>
+      <div class="ar-obj-ring"></div>
+      <div class="ar-obj-dot"></div>
+    </div>
+ 
+    <div id="arParticles"></div>
+ 
+    <!-- Scan hint -->
+    <div id="scanHint">Point camera at the window</div>
+ 
+    <!-- HUD -->
+    <div class="camera-hud">
+      <div class="hud-status">
+        <div class="hud-live">
+          <div class="hud-dot"></div>
+          AR Live
+        </div>
+        <div class="hud-time" id="hudTime">—</div>
+      </div>
+      <div class="hud-detect">
+        <div class="hud-detect-label">Window</div>
+        <div class="hud-detect-val" id="detectVal">Scanning…</div>
+      </div>
+    </div>
+ 
+    <!-- Product popup -->
+    <div class="product-popup" id="productPopup">
+      <button class="popup-close" onclick="closeProduct()">✕</button>
+      <div class="popup-tag" id="popupTag">Object</div>
+      <div class="popup-name" id="popupName">—</div>
+      <div class="popup-desc" id="popupDesc">—</div>
+      <div class="popup-meta">
+        <div class="popup-meta-item">Material<strong id="popupMaterial">—</strong></div>
+        <div class="popup-meta-item">Artisan<strong id="popupArtisan">—</strong></div>
+        <div class="popup-meta-item">Origin<strong id="popupOrigin">—</strong></div>
+      </div>
+    </div>
+ 
+    <!-- Camera controls — absolutely positioned over the viewport, no background -->
+    <div class="camera-controls">
+      <button class="cam-ctrl-btn" id="audioBtn" onclick="toggleAudio()">
+        <div class="cam-ctrl-icon" id="audioIcon">♪</div>
+        <div class="cam-ctrl-label" id="audioLabel">Audio</div>
+      </button>
+      <button class="cam-ctrl-btn" id="infoBtn" onclick="toggleInfoPoints()">
+        <div class="cam-ctrl-icon" id="infoIcon">◎</div>
+        <div class="cam-ctrl-label" id="infoLabel">Info</div>
+      </button>
+      <button class="cam-ctrl-btn" onclick="openGuide()">
+        <div class="cam-ctrl-icon">?</div>
+        <div class="cam-ctrl-label">Guide</div>
+      </button>
+    </div>
+ 
+  </div><!-- /camera-viewport -->
+ 
+</div><!-- /page-camera -->
+ 
+<!-- ═══════════════ STORY PAGE ═══════════════ -->
+<div id="page-story" class="page story-page">
+  <nav class="nav">
+    <img src="./hermeslogo.png" alt="Hermès" class="nav-logo">
+    <div class="nav-links">
+      <button class="nav-btn" onclick="navigate('home')" data-page="home">Home</button>
+      <button class="nav-btn" onclick="navigate('camera')" data-page="camera">AR</button>
+      <button class="nav-btn active" onclick="navigate('story')" data-page="story">Story</button>
+    </div>
+  </nav>
+ 
+  <div data-scroll class="scroll-inner" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;height:calc(100dvh - 56px);">
+    <div class="story-hero">
+      <div class="story-season">New York City · Spring · 2026</div>
+      <h2 class="story-title">Through<br><em>The</em><br>Looking Glass</h2>
+      <p class="story-artist-line">A window conceived by Tim Lahan</p>
+ 
+      <div class="story-window-wrap">
+        <div class="story-window-scene"></div>
+        <div class="story-win-scarf"></div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.2;" preserveAspectRatio="none">
+          <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#E8601C" stroke-width="0.8"/>
+          <line x1="0" y1="50%" x2="100%" y2="50%" stroke="#E8601C" stroke-width="0.8"/>
+        </svg>
+        <div class="story-win-particles" id="storyParticles"></div>
+        <div style="position:absolute;top:18%;left:20%;width:60%;height:3px;background:linear-gradient(90deg,transparent,rgba(232,96,28,0.6),transparent);transform:rotate(10deg);animation:scarfDrift 8s ease-in-out infinite 2s;"></div>
+      </div>
+ 
+      <div class="story-artist-card">
+        <div class="artist-avatar">TL</div>
+        <div>
+          <div class="artist-name">Tim Lahan</div>
+          <div class="artist-role">Window Artist · New York</div>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="story-concept">
+      <div class="section-label">The Concept</div>
+      <div class="concept-quote">
+        "I wanted the window to ask a question — not answer one. What do we see when we look through something rather than at it?"
+      </div>
+      <p class="concept-body">
+        Drawing on Lewis Carroll's threshold imagery and the Hermès atelier traditions of Lyon silk weaving, Lahan constructed a window that exists in perpetual becoming. Objects are not displayed — they are discovered. The silk floats as if just released from a hand. The leather bag casts a shadow that precedes it. The window is an invitation to look again.<br><br>
+        Installed over eleven days at the Madison Avenue flagship, the composition required 34 distinct silk samples, three artisans from the Bourgoin-Jallieu manufacture, and one mirror placed behind a mirror.
+      </p>
+    </div>
+ 
+    <div class="story-keepsakes">
+      <div class="keepsakes-title">Digital Keepsakes</div>
+      <div class="keepsakes-sub">Yours to keep · Download free</div>
+ 
+      <div class="keepsakes-grid">
+        <div class="keepsake-card">
+          <div class="keepsake-preview kp-bg-1">
+            <img src="./download/wallp1.jpeg" alt="La Soie, Libre" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
+            <div class="kp-anim-scarf" style="position:absolute;top:50%;left:10%;"></div>
+          </div>
+          <div class="kp-label">
+            <div class="kp-type">Wallpaper · I</div>
+            <div class="kp-name">La Soie, Libre</div>
+            <button class="kp-dl-btn" onclick="downloadFile('./download/wallp1.jpeg','hermes-la-soie-libre.jpeg')">
+              <div class="kp-dl-icon">↓</div>
+              Download
+            </button>
+          </div>
+        </div>
+ 
+        <div class="keepsake-card">
+          <div class="keepsake-preview kp-bg-2">
+            <img src="./download/wallp2.jpeg" alt="Fenêtre, Minuit" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
+            <div class="kp-anim-window" style="position:absolute;inset:15%;"></div>
+          </div>
+          <div class="kp-label">
+            <div class="kp-type">Wallpaper · II</div>
+            <div class="kp-name">Fenêtre, Minuit</div>
+            <button class="kp-dl-btn" onclick="downloadFile('./download/wallp2.jpeg','hermes-fenetre-minuit.jpeg')">
+              <div class="kp-dl-icon">↓</div>
+              Download
+            </button>
+          </div>
+        </div>
+ 
+        <div class="keepsake-card" style="grid-column:span 2;">
+          <div class="keepsake-preview kp-bg-3" style="aspect-ratio:2/1;position:relative;">
+            <img src="./download/wallp3.jpeg" alt="Le Regard qui Traverse" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
+            <div class="kp-anim-loop" style="position:absolute;inset:0;">
+              <div class="kp-loop-line"></div>
+            </div>
+          </div>
+          <div class="kp-label">
+            <div class="kp-type">Wallpaper · III</div>
+            <div class="kp-name">Le Regard qui Traverse</div>
+            <button class="kp-dl-btn" onclick="downloadFile('./download/wallp3.jpeg','hermes-le-regard.jpeg')">
+              <div class="kp-dl-icon">↓</div>
+              Download
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
-  <div id="page-camera" class="page camera-page">
-    <nav class="nav" style="background:rgba(10,10,10,0.20);border-color:rgba(232,96,28,0.2);">
-      <!-- <span class="nav-brand" style="color:rgba(255,255,255,0.85);">Hermès</span> -->
-      <img src="./Hermès Logo.png" alt="Hermès" class="nav-logo">
-      <div class="nav-links">
-        <button class="nav-btn" onclick="navigate('home')" data-page="home"
-          style="color:rgba(255,255,255,0.4);">Home</button>
-        <button class="nav-btn active" onclick="navigate('camera')" data-page="camera"
-          style="color:var(--orange);border-bottom-color:var(--orange);">AR</button>
-        <button class="nav-btn" onclick="navigate('story')" data-page="story"
-          style="color:rgba(255,255,255,0.4);">Story</button>
-      </div>
-    </nav>
-    <div class="camera-viewport">
-      <video id="cameraVideo" autoplay playsinline muted></video>
-      <canvas id="arCanvas"></canvas>
-      <div id="glbOverlay">
-        <div class="glb-wrap" id="mv1wrap"><iframe title="Birds" frameborder="0" allowfullscreen
-            mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking"
-            xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share
-            src="https://sketchfab.com/models/8a45f757c17e4efb87684c91115b98d3/embed?autostart=1&transparent=1&ui_infos=0&ui_controls=0&ui_stop=0&ui_watermark=0&dnt=1"></iframe>
-        </div>
-        <div class="glb-wrap" id="mv2wrap"><iframe title="Birds" frameborder="0" allowfullscreen
-            mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking"
-            xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share
-            src="https://sketchfab.com/models/8a45f757c17e4efb87684c91115b98d3/embed?autostart=1&transparent=1&ui_infos=0&ui_controls=0&ui_stop=0&ui_watermark=0&dnt=1"></iframe>
-        </div>
-        <div class="glb-wrap" id="mv3wrap"><iframe title="Birds" frameborder="0" allowfullscreen
-            mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking"
-            xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share
-            src="https://sketchfab.com/models/8a45f757c17e4efb87684c91115b98d3/embed?autostart=1&transparent=1&ui_infos=0&ui_controls=0&ui_stop=0&ui_watermark=0&dnt=1"></iframe>
-        </div>
-      </div>
-      <div class="ar-object" id="hs-scarf" onclick="showProduct('scarf')">
-        <div class="ar-obj-ring"></div>
-        <div class="ar-obj-ring"></div>
-        <div class="ar-obj-dot"></div>
-      </div>
-      <div class="ar-object" id="hs-bag" onclick="showProduct('bag')">
-        <div class="ar-obj-ring"></div>
-        <div class="ar-obj-ring"></div>
-        <div class="ar-obj-dot"></div>
-      </div>
-      <div class="ar-object" id="hs-silk" onclick="showProduct('silk')">
-        <div class="ar-obj-ring"></div>
-        <div class="ar-obj-ring"></div>
-        <div class="ar-obj-dot"></div>
-      </div>
-      <div id="arParticles"></div>
-      <div id="scanHint">Point camera at the window</div>
-      <div class="camera-hud">
-        <div class="hud-status">
-          <div class="hud-live">
-            <div class="hud-dot"></div>AR Live
-          </div>
-          <div class="hud-time" id="hudTime">—</div>
-        </div>
-        <div class="hud-detect">
-          <div class="hud-detect-label">Window</div>
-          <div class="hud-detect-val" id="detectVal">Scanning…</div>
-        </div>
-      </div>
-      <div class="product-popup" id="productPopup">
-        <button class="popup-close" onclick="closeProduct()">✕</button>
-        <div class="popup-tag" id="popupTag">Object</div>
-        <div class="popup-name" id="popupName">—</div>
-        <div class="popup-desc" id="popupDesc">—</div>
-        <div class="popup-meta">
-          <div class="popup-meta-item">Material<strong id="popupMaterial">—</strong></div>
-          <div class="popup-meta-item">Artisan<strong id="popupArtisan">—</strong></div>
-          <div class="popup-meta-item">Origin<strong id="popupOrigin">—</strong></div>
-        </div>
-      </div>
-      <div class="camera-controls">
-        <button class="cam-ctrl-btn" id="audioBtn" onclick="toggleAudio()">
-          <div class="cam-ctrl-icon" id="audioIcon">♪</div>
-          <div class="cam-ctrl-label" id="audioLabel">Audio</div>
-        </button>
-        <button class="cam-ctrl-btn" id="infoBtn" onclick="toggleInfoPoints()">
-          <div class="cam-ctrl-icon" id="infoIcon">◎</div>
-          <div class="cam-ctrl-label" id="infoLabel">Info</div>
-        </button>
-        <button class="cam-ctrl-btn" onclick="openGuide()">
-          <div class="cam-ctrl-icon">?</div>
-          <div class="cam-ctrl-label">Guide</div>
-        </button>
+</div>
+ 
+<!-- ═══════════════ GUIDE MODAL ═══════════════ -->
+<div class="info-modal" id="infoModal" onclick="closeGuide(event)">
+  <div class="info-sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">How to explore</div>
+    <div class="sheet-subtitle">Your complete guide</div>
+ 
+    <div class="info-step">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title">Position your phone</div>
+        <div class="step-body">Hold your phone at arm's length, pointed at the window. The AR frame will align itself with the window's borders.</div>
       </div>
     </div>
-  </div>
-
-  <div id="page-story" class="page story-page">
-    <nav class="nav">
-      <img src="./Hermès Logo.png" alt="Hermès" class="nav-logo">
-
-      <div class="nav-links">
-        <button class="nav-btn" onclick="navigate('home')" data-page="home">Home</button>
-        <button class="nav-btn" onclick="navigate('camera')" data-page="camera">AR</button>
-        <button class="nav-btn active" onclick="navigate('story')" data-page="story">Story</button>
-      </div>
-    </nav>
-    <div data-scroll class="scroll-inner"
-      style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;height:calc(100dvh - 56px);">
-      <div class="story-hero">
-        <div class="story-season">New York City · Spring · 2026</div>
-        <h2 class="story-title">Through<br><em>The</em><br>Looking Glass</h2>
-        <p class="story-artist-line">A window conceived by Tim Lahan</p>
-        <div class="story-window-wrap">
-          <div class="story-window-scene"></div>
-          <div class="story-win-scarf"></div>
-          <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.2;" preserveAspectRatio="none">
-            <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#E8601C" stroke-width="0.8" />
-            <line x1="0" y1="50%" x2="100%" y2="50%" stroke="#E8601C" stroke-width="0.8" />
-          </svg>
-          <div class="story-win-particles" id="storyParticles"></div>
-          <div
-            style="position:absolute;top:18%;left:20%;width:60%;height:3px;background:linear-gradient(90deg,transparent,rgba(232,96,28,0.6),transparent);transform:rotate(10deg);animation:scarfDrift 8s ease-in-out infinite 2s;">
-          </div>
-        </div>
-        <div class="story-artist-card">
-          <div class="artist-avatar">TL</div>
-          <div>
-            <div class="artist-name">Tim Lahan</div>
-            <div class="artist-role">Window Artist · New York</div>
-          </div>
-        </div>
-      </div>
-      <div class="story-concept">
-        <div class="section-label">The Concept</div>
-        <div class="concept-quote">"I wanted the window to ask a question — not answer one. What do we see when we look
-          through something rather than at it?"</div>
-        <p class="concept-body">Drawing on Lewis Carroll's threshold imagery and the Hermès atelier traditions of Lyon
-          silk weaving, Lahan constructed a window that exists in perpetual becoming. Objects are not displayed — they
-          are discovered. The silk floats as if just released from a hand. The leather bag casts a shadow that precedes
-          it. The window is an invitation to look again.<br><br>Installed over eleven days at the Madison Avenue
-          flagship, the composition required 34 distinct silk samples, three artisans from the Bourgoin-Jallieu
-          manufacture, and one mirror placed behind a mirror.</p>
-      </div>
-      <div class="story-keepsakes">
-        <div class="keepsakes-title">Digital Keepsakes</div>
-        <div class="keepsakes-sub">Yours to keep · Download free</div>
-        <div class="keepsakes-grid">
-          <div class="keepsake-card">
-            <div class="keepsake-preview kp-bg-1"><img src="./download/wallp1.jpeg" alt="La Soie, Libre"
-                style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
-              <div class="kp-anim-scarf" style="position:absolute;top:50%;left:10%;"></div>
-            </div>
-            <div class="kp-label">
-              <div class="kp-type">Wallpaper · I</div>
-              <div class="kp-name">La Soie, Libre</div><button class="kp-dl-btn"
-                onclick="downloadFile('./download/wallp1.jpeg','hermes-la-soie-libre.jpeg')">
-                <div class="kp-dl-icon">↓</div>Download
-              </button>
-            </div>
-          </div>
-          <div class="keepsake-card">
-            <div class="keepsake-preview kp-bg-2"><img src="./download/wallp2.jpeg" alt="Fenêtre, Minuit"
-                style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
-              <div class="kp-anim-window" style="position:absolute;inset:15%;"></div>
-            </div>
-            <div class="kp-label">
-              <div class="kp-type">Wallpaper · II</div>
-              <div class="kp-name">Fenêtre, Minuit</div><button class="kp-dl-btn"
-                onclick="downloadFile('./download/wallp2.jpeg','hermes-fenetre-minuit.jpeg')">
-                <div class="kp-dl-icon">↓</div>Download
-              </button>
-            </div>
-          </div>
-          <div class="keepsake-card" style="grid-column:span 2;">
-            <div class="keepsake-preview kp-bg-3" style="aspect-ratio:2/1;position:relative;"><img
-                src="./download/wallp3.jpeg" alt="Le Regard qui Traverse"
-                style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
-              <div class="kp-anim-loop" style="position:absolute;inset:0;">
-                <div class="kp-loop-line"></div>
-              </div>
-            </div>
-            <div class="kp-label">
-              <div class="kp-type">Wallpaper · III</div>
-              <div class="kp-name">Le Regard qui Traverse</div><button class="kp-dl-btn"
-                onclick="downloadFile('./download/wallp3.jpeg','hermes-le-regard.jpeg')">
-                <div class="kp-dl-icon">↓</div>Download
-              </button>
-            </div>
-          </div>
-        </div>
+ 
+    <div class="info-step">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title">Reveal glowing points</div>
+        <div class="step-body">Tap the "Info" button in the control bar to reveal the glowing orange dots. They are hidden by default — tap again to hide them.</div>
       </div>
     </div>
-  </div>
-
-  <div class="info-modal" id="infoModal" onclick="closeGuide(event)">
-    <div class="info-sheet" onclick="event.stopPropagation()">
-      <div class="sheet-handle"></div>
-      <div class="sheet-title">How to explore</div>
-      <div class="sheet-subtitle">Your complete guide</div>
-      <div class="info-step">
-        <div class="step-num">1</div>
-        <div>
-          <div class="step-title">Position your phone</div>
-          <div class="step-body">Hold your phone at arm's length, pointed at the window. The AR frame will align itself
-            with the window's borders.</div>
-        </div>
+ 
+    <div class="info-step">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title">Tap to discover</div>
+        <div class="step-body">Tap any glowing point to open its catalogue entry — material, artisan, origin, and the story of how this object came to live in this window at this moment.</div>
       </div>
-      <div class="info-step">
-        <div class="step-num">2</div>
-        <div>
-          <div class="step-title">Reveal glowing points</div>
-          <div class="step-body">Tap the "Info" button to reveal the glowing orange dots. They are hidden by default —
-            tap again to hide them.</div>
-        </div>
-      </div>
-      <div class="info-step">
-        <div class="step-num">3</div>
-        <div>
-          <div class="step-title">Tap to discover</div>
-          <div class="step-body">Tap any glowing point to open its catalogue entry — material, artisan, origin, and the
-            story of how this object came to live in this window.</div>
-        </div>
-      </div>
-      <div class="info-step">
-        <div class="step-num">4</div>
-        <div>
-          <div class="step-title">Listen to the window</div>
-          <div class="step-body">Audio plays automatically and shifts with time of day. At dawn, the atelier. At dusk,
-            the distant sound of horses on cobblestone.</div>
-        </div>
-      </div>
-      <div class="info-step">
-        <div class="step-num">5</div>
-        <div>
-          <div class="step-title">Take something with you</div>
-          <div class="step-body">Visit the Story page to download wallpapers as keepsakes — a fragment of the window,
-            yours to keep.</div>
-        </div>
-      </div>
-      <button class="sheet-close" onclick="closeGuide()">Close</button>
     </div>
+ 
+    <div class="info-step">
+      <div class="step-num">4</div>
+      <div>
+        <div class="step-title">Listen to the window</div>
+        <div class="step-body">Audio plays automatically and shifts with time of day. At dawn, you may hear the atelier — scissors, thread, silk against silk. At dusk, maybe it is the distant sound of horses on cobblestone. The closer you are, the richer the audio becomes.</div>
+      </div>
+    </div>
+ 
+    <div class="info-step">
+      <div class="step-num">5</div>
+      <div>
+        <div class="step-title">Take something with you</div>
+        <div class="step-body">Visit the Story page to download wallpapers and animations as keepsakes — a fragment of the window, yours to keep long after the season ends.</div>
+      </div>
+    </div>
+ 
+    <button class="sheet-close" onclick="closeGuide()">Close</button>
   </div>
-  <div class="toast" id="toast"></div>
-
-  <script>
-    function navigate(page) {
-      document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.style.display = 'none'; });
-      const target = document.getElementById('page-' + page); if (!target) return;
-      target.style.display = 'flex'; target.classList.add('active');
-      target.querySelectorAll('.scroll-inner').forEach(el => { el.scrollTop = 0; });
-      document.querySelectorAll('.nav-btn[data-page]').forEach(btn => { btn.classList.toggle('active', btn.dataset.page === page); });
-      if (page === 'camera') { startCamera(); if (!audioMuted) playAudio(); }
-      else { stopCamera(); if (typeof audio !== 'undefined') audio.pause(); }
+</div>
+ 
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+ 
+<script>
+/* ─── NAVIGATION ─── */
+function navigate(page) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active');
+    p.style.display = 'none';
+  });
+ 
+  // Show target page
+  const target = document.getElementById('page-' + page);
+  if (!target) return;
+  target.style.display = 'flex';
+  target.classList.add('active');
+ 
+  // Reset any inner scroll containers to top
+  target.querySelectorAll('.scroll-inner').forEach(el => { el.scrollTop = 0; });
+ 
+  // Sync nav button active state across all navs
+  document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.page === page);
+  });
+ 
+  // Camera lifecycle
+  if (page === 'camera') {
+    startCamera();
+    if (!audioMuted) playAudio();
+  } else {
+    stopCamera();
+    if (typeof audio !== 'undefined') audio.pause();
+  }
+}
+ 
+/* ─── CAMERA + AR ENGINE ─── */
+let cameraStream  = null;
+let arRAF         = null;
+let arAnimTime    = 0;
+let detBuf        = null;
+let detCtx        = null;
+let windowRect    = null;   // {x,y,w,h} in canvas pixels, smoothed
+let windowStable  = 0;      // consecutive frames detected
+let infoVisible   = false;
+ 
+// Particle data for overlay (generated once)
+const AR_PARTICLES = Array.from({length:16}, () => ({
+  rx: 0.05 + Math.random() * 0.90,
+  ry: 0.05 + Math.random() * 0.80,
+  speed: 0.007 + Math.random() * 0.015,
+  size: 1 + Math.random() * 1.5,
+  phase: Math.random() * Math.PI * 2,
+  drift: (Math.random() - 0.5) * 0.03,
+}));
+ 
+// Bird flock data — each bird has independent flight path + flap timing
+const BIRDS = Array.from({length: 9}, (_, i) => ({
+  cx:       0.15 + Math.random() * 0.70,  // centre x fraction of window
+  cy:       0.12 + Math.random() * 0.65,  // centre y fraction
+  rx:       0.06 + Math.random() * 0.14,  // x orbit radius
+  ry:       0.04 + Math.random() * 0.10,  // y orbit radius
+  speedX:   0.18 + Math.random() * 0.28,  // x oscillation speed
+  speedY:   0.12 + Math.random() * 0.22,  // y oscillation speed
+  flapRate: 2.5  + Math.random() * 3.5,   // wing flap speed
+  phase:    Math.random() * Math.PI * 2,  // offset so birds aren't synchronised
+  size:     0.55 + Math.random() * 0.75,  // scale (px)
+}));
+ 
+// Hotspot positions as fractions of detected window
+const HOTSPOTS = [
+  { id:'hs-scarf', rx:0.42, ry:0.28 },
+  { id:'hs-bag',   rx:0.22, ry:0.60 },
+  { id:'hs-silk',  rx:0.72, ry:0.44 },
+];
+ 
+async function startCamera() {
+  try {
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width:{ideal:1280}, height:{ideal:720} },
+      audio: false
+    });
+    const video = document.getElementById('cameraVideo');
+    video.srcObject = cameraStream;
+    video.addEventListener('loadedmetadata', initAR, { once: true });
+  } catch (err) {
+    console.error('Camera error:', err);
+    document.getElementById('scanHint').textContent = 'Camera access required';
+  }
+}
+ 
+function stopCamera() {
+  if (arRAF) { cancelAnimationFrame(arRAF); arRAF = null; }
+  if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
+  windowRect   = null;
+  windowStable = 0;
+  arAnimTime   = 0;
+  const c = document.getElementById('arCanvas');
+  if (c) c.getContext('2d').clearRect(0,0,c.width,c.height);
+  setDetectHUD(false);
+}
+ 
+function initAR() {
+  const video = document.getElementById('cameraVideo');
+  const canvas = document.getElementById('arCanvas');
+  canvas.width  = video.videoWidth  || window.innerWidth;
+  canvas.height = video.videoHeight || window.innerHeight;
+  // Small detection buffer at 1/4 resolution for speed
+  detBuf = document.createElement('canvas');
+  detBuf.width  = Math.floor(canvas.width  / 4);
+  detBuf.height = Math.floor(canvas.height / 4);
+  detCtx = detBuf.getContext('2d', { willReadFrequently: true });
+  arLoop();
+}
+ 
+function arLoop() {
+  arRAF = requestAnimationFrame(arLoop);
+  const video  = document.getElementById('cameraVideo');
+  const canvas = document.getElementById('arCanvas');
+  if (!video || video.readyState < 2 || !canvas) return;
+ 
+  arAnimTime += 0.016;
+  const ctx = canvas.getContext('2d');
+ 
+  // Resize canvas on orientation change
+  if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
+    canvas.width  = video.videoWidth;
+    canvas.height = video.videoHeight;
+    if (detBuf) { detBuf.width = Math.floor(canvas.width/4); detBuf.height = Math.floor(canvas.height/4); }
+  }
+ 
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+ 
+  // Run detection every 10 frames
+  if (Math.round(arAnimTime * 60) % 10 === 0) detectWindow(video, canvas);
+ 
+  if (windowRect && windowStable > 5) {
+    // DETECTED — draw ambient overlay (no scan), show butterflies
+    drawAROverlay(ctx, windowRect, arAnimTime);
+    setDetectHUD(true);
+    document.getElementById('scanHint').style.opacity = '0';
+    // Show and position the Sketchfab bird iframes
+    positionGLBOverlays(canvas, windowRect);
+    document.getElementById('glbOverlay').classList.add('visible');
+    if (infoVisible) positionHotspots(canvas, windowRect);
+  } else {
+    // SCANNING — draw scan animation across full canvas, hide butterflies
+    drawScanOverlay(ctx, canvas.width, canvas.height, arAnimTime);
+    setDetectHUD(false);
+    document.getElementById('scanHint').style.opacity = '1';
+    // Hide GLB overlays while scanning
+    document.getElementById('glbOverlay').classList.remove('visible');
+  }
+}
+ 
+/* Luminance-based rectangle detector */
+function detectWindow(video, canvas) {
+  const bw = detBuf.width, bh = detBuf.height;
+  detCtx.drawImage(video, 0, 0, bw, bh);
+  const { data } = detCtx.getImageData(0, 0, bw, bh);
+ 
+  const lum = new Uint8Array(bw * bh);
+  for (let i = 0; i < lum.length; i++) {
+    lum[i] = (data[i*4]*77 + data[i*4+1]*150 + data[i*4+2]*29) >> 8;
+  }
+ 
+  // Row & column average luminance
+  const rowAvg = new Float32Array(bh);
+  const colAvg = new Float32Array(bw);
+  for (let y = 0; y < bh; y++) { let s=0; for (let x=0;x<bw;x++) s+=lum[y*bw+x]; rowAvg[y]=s/bw; }
+  for (let x = 0; x < bw; x++) { let s=0; for (let y=0;y<bh;y++) s+=lum[y*bw+x]; colAvg[x]=s/bh; }
+ 
+  const globalAvg = rowAvg.reduce((a,b)=>a+b,0) / bh;
+  const thresh = globalAvg * 1.18;
+ 
+  let top=-1, bottom=-1, left=-1, right=-1;
+  for (let y=0;y<bh;y++) if (rowAvg[y]>thresh) { if(top<0) top=y; bottom=y; }
+  for (let x=0;x<bw;x++) if (colAvg[x]>thresh) { if(left<0) left=x; right=x; }
+ 
+  const fw = right-left, fh = bottom-top;
+  if (top>=0 && left>=0 && fw > bw*0.15 && fh > bh*0.15) {
+    const sx = canvas.width/bw, sy = canvas.height/bh;
+    const nr = { x:left*sx, y:top*sy, w:fw*sx, h:fh*sy };
+    if (!windowRect) {
+      windowRect = nr;
+    } else {
+      const k = 0.12; // smoothing factor
+      windowRect.x += (nr.x - windowRect.x)*k;
+      windowRect.y += (nr.y - windowRect.y)*k;
+      windowRect.w += (nr.w - windowRect.w)*k;
+      windowRect.h += (nr.h - windowRect.h)*k;
     }
-
-    let cameraStream = null, arRAF = null, arAnimTime = 0, detBuf = null, detCtx = null;
-    let windowRect = null, windowStable = 0, infoVisible = false, birdsInitialised = false;
-
-    const HOTSPOTS = [{ id: 'hs-scarf', rx: 0.42, ry: 0.28 }, { id: 'hs-bag', rx: 0.22, ry: 0.60 }, { id: 'hs-silk', rx: 0.72, ry: 0.44 }];
-
-    async function startCamera() {
-      try {
-        cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
-        const video = document.getElementById('cameraVideo');
-        video.srcObject = cameraStream;
-        video.addEventListener('loadedmetadata', initAR, { once: true });
-      } catch (err) { console.error('Camera error:', err); document.getElementById('scanHint').textContent = 'Camera access required'; }
-    }
-
-    function stopCamera() {
-      if (arRAF) { cancelAnimationFrame(arRAF); arRAF = null; }
-      if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
-      windowRect = null; windowStable = 0; arAnimTime = 0; birdsInitialised = false; blueBirdPos = null;
-      const c = document.getElementById('arCanvas');
-      if (c) c.getContext('2d').clearRect(0, 0, c.width, c.height);
-      setDetectHUD(false);
-    }
-
-    function initAR() {
-      const video = document.getElementById('cameraVideo'), canvas = document.getElementById('arCanvas');
-      canvas.width = video.videoWidth || window.innerWidth; canvas.height = video.videoHeight || window.innerHeight;
-      detBuf = document.createElement('canvas');
-      detBuf.width = Math.floor(canvas.width / 4); detBuf.height = Math.floor(canvas.height / 4);
-      detCtx = detBuf.getContext('2d', { willReadFrequently: true });
-      arLoop();
-    }
-
-    function arLoop() {
-      arRAF = requestAnimationFrame(arLoop);
-      const video = document.getElementById('cameraVideo'), canvas = document.getElementById('arCanvas');
-      if (!video || video.readyState < 2 || !canvas) return;
-      arAnimTime += 0.016;
-      const ctx = canvas.getContext('2d');
-      if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
-        canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-        if (detBuf) { detBuf.width = Math.floor(canvas.width / 4); detBuf.height = Math.floor(canvas.height / 4); }
-      }
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      if (Math.round(arAnimTime * 60) % 10 === 0) detectWindow(video, canvas);
-      if (windowRect && windowStable > 5) {
-        drawAROverlay(ctx, windowRect, arAnimTime); setDetectHUD(true);
-        document.getElementById('scanHint').style.opacity = '0';
-        positionGLBOverlays(canvas, windowRect);
-        document.getElementById('glbOverlay').classList.add('visible');
-        initialiseBirds();
-        if (infoVisible) positionHotspots(canvas, windowRect);
-      } else {
-        drawScanOverlay(ctx, canvas.width, canvas.height, arAnimTime); setDetectHUD(false);
-        document.getElementById('scanHint').style.opacity = '1';
-        document.getElementById('glbOverlay').classList.remove('visible');
-      }
-    }
-
-    /* ── STRICTER WINDOW DETECTION ──
-       Requires: 1) brightness 35%+ above global average
-                 2) minimum 22% frame coverage each axis
-                 3) plausible window aspect ratio (0.3–4.0)
-                 4) sharp edges at the boundary (contrast ≥ 18 luminance units)
-                 5) bright interior (uniformity check via grid sampling)
-                 6) faster decay on miss (−2 per miss) so false positives clear quickly */
-    function detectWindow(video, canvas) {
-      const bw = detBuf.width, bh = detBuf.height;
-      detCtx.drawImage(video, 0, 0, bw, bh);
-      const { data } = detCtx.getImageData(0, 0, bw, bh);
-      const lum = new Uint8Array(bw * bh);
-      for (let i = 0; i < lum.length; i++)lum[i] = (data[i * 4] * 77 + data[i * 4 + 1] * 150 + data[i * 4 + 2] * 29) >> 8;
-
-      const rowAvg = new Float32Array(bh), colAvg = new Float32Array(bw);
-      for (let y = 0; y < bh; y++) { let s = 0; for (let x = 0; x < bw; x++)s += lum[y * bw + x]; rowAvg[y] = s / bw; }
-      for (let x = 0; x < bw; x++) { let s = 0; for (let y = 0; y < bh; y++)s += lum[y * bw + x]; colAvg[x] = s / bh; }
-
-      const globalAvg = rowAvg.reduce((a, b) => a + b, 0) / bh;
-      // Calibrated to real Hermes window: interior is ~20% brighter than street avg
-      const thresh = globalAvg * 1.20;
-
-      let top = -1, bottom = -1, left = -1, right = -1;
-      for (let y = 0; y < bh; y++)if (rowAvg[y] > thresh) { if (top < 0) top = y; bottom = y; }
-      for (let x = 0; x < bw; x++)if (colAvg[x] > thresh) { if (left < 0) left = x; right = x; }
-
-      const fw = right - left, fh = bottom - top;
-
-      // Must cover at least 12% of frame each axis
-      if (top < 0 || left < 0 || fw < bw * 0.12 || fh < bh * 0.12) {
-        windowStable = Math.max(0, windowStable - 2); if (windowStable === 0) windowRect = null; return;
-      }
-
-      // Aspect ratio: 0.3 to 4.0
-      const ar = fw / fh;
-      if (ar < 0.3 || ar > 4.0) {
-        windowStable = Math.max(0, windowStable - 2); if (windowStable === 0) windowRect = null; return;
-      }
-
-      // Edge sharpness: at least 8 avg luminance units contrast at boundary
-      // (real windows set into stone have shadowed reveals, not pure-black frames)
-      const N = 8; let edgeScore = 0;
-      if (top > 1) { for (let i = 0; i < N; i++) { const x = Math.floor(left + (i + 0.5) * fw / N); edgeScore += Math.abs(lum[top * bw + x] - lum[(top - 1) * bw + x]); } }
-      if (left > 1) { for (let i = 0; i < N; i++) { const y = Math.floor(top + (i + 0.5) * fh / N); edgeScore += Math.abs(lum[y * bw + left] - lum[y * bw + (left - 1)]); } }
-      if (edgeScore / (N * 2) < 8) {
-        windowStable = Math.max(0, windowStable - 1); if (windowStable === 0) windowRect = null; return;
-      }
-
-      // Interior uniformity: 4x4 grid must average at least 80% of threshold
-      let interior = 0; const G = 4;
-      for (let gy = 0; gy < G; gy++)for (let gx = 0; gx < G; gx++) {
-        const sx = Math.floor(left + (gx + 1) * fw / (G + 1)), sy = Math.floor(top + (gy + 1) * fh / (G + 1));
-        interior += lum[sy * bw + sx];
-      }
-      if (interior / (G * G) < thresh * 0.80) {
-        windowStable = Math.max(0, windowStable - 1); if (windowStable === 0) windowRect = null; return;
-      }
-
-      // All checks passed — smooth toward new rect
-      const scx = canvas.width / bw, scy = canvas.height / bh;
-      const nr = { x: left * scx, y: top * scy, w: fw * scx, h: fh * scy };
-      if (!windowRect) { windowRect = nr; }
-      else {
-        const k = 0.10;
-        windowRect.x += (nr.x - windowRect.x) * k; windowRect.y += (nr.y - windowRect.y) * k;
-        windowRect.w += (nr.w - windowRect.w) * k; windowRect.h += (nr.h - windowRect.h) * k;
-      }
-      windowStable = Math.min(windowStable + 1, 60);
-
-      // Secondary pass: locate the blue-sky artwork inside the window
-      // The paper bird sits inside a sky-blue painting — track it to anchor bird 1
-      detectBlueBird(data, bw, bh, left, top, fw, fh, canvas);
-    }
-
-    // Tracks the sky-blue artwork frame that contains the paper bird silhouette.
-    // Returns its centre as fractions of the window rect so bird 1 hovers over it.
-    let blueBirdPos = null;
-
-    function detectBlueBird(data, bw, bh, winLeft, winTop, winW, winH, canvas) {
-      const xl = Math.max(0, winLeft), xr = Math.min(bw - 1, winLeft + winW);
-      const yt = Math.max(0, winTop), yb = Math.min(bh - 1, winTop + winH);
-
-      let bMinX = xr, bMaxX = xl, bMinY = yb, bMaxY = yt, bCount = 0;
-
-      for (let y = yt; y < yb; y += 2) {
-        for (let x = xl; x < xr; x += 2) {
-          const i = (y * bw + x) * 4;
-          const r = data[i], g = data[i + 1], b = data[i + 2];
-          // Sky-blue signature: strong blue, decent green, clearly less red
-          // Calibrated from window image pixels: (63,138,221), (74,168,255), (82,179,255)
-          if (b > 160 && g > 100 && b - r > 50 && b - g > 15) {
-            if (x < bMinX) bMinX = x; if (x > bMaxX) bMaxX = x;
-            if (y < bMinY) bMinY = y; if (y > bMaxY) bMaxY = y;
-            bCount++;
-          }
-        }
-      }
-
-      const blueW = bMaxX - bMinX, blueH = bMaxY - bMinY;
-      if (bCount > 30 && blueW > winW * 0.04 && blueH > winH * 0.03) {
-        const cx = (bMinX + bMaxX) / 2, cy = (bMinY + bMaxY) / 2;
-        const rx = (cx - winLeft) / winW, ry = (cy - winTop) / winH;
-        if (!blueBirdPos) { blueBirdPos = { rx, ry }; }
-        else { const k = 0.08; blueBirdPos.rx += (rx - blueBirdPos.rx) * k; blueBirdPos.ry += (ry - blueBirdPos.ry) * k; }
-      } else {
-        // Drift back to a sensible default if blue not found
-        if (blueBirdPos) { blueBirdPos.rx += (0.55 - blueBirdPos.rx) * 0.02; blueBirdPos.ry += (0.35 - blueBirdPos.ry) * 0.02; }
-      }
-    }
-
-    function drawScanOverlay(ctx, W, H, t) {
-      ctx.save();
-      const scanY = ((t * 0.15) % 1) * H;
-      const g = ctx.createLinearGradient(0, 0, W, 0);
-      g.addColorStop(0, 'rgba(232,96,28,0)'); g.addColorStop(0.25, 'rgba(232,96,28,0.45)'); g.addColorStop(0.5, 'rgba(245,165,112,0.85)'); g.addColorStop(0.75, 'rgba(232,96,28,0.45)'); g.addColorStop(1, 'rgba(232,96,28,0)');
-      ctx.strokeStyle = g; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(0, scanY); ctx.lineTo(W, scanY); ctx.stroke();
-      const gg = ctx.createLinearGradient(0, scanY, 0, scanY + 40); gg.addColorStop(0, 'rgba(232,96,28,0.08)'); gg.addColorStop(1, 'rgba(232,96,28,0)'); ctx.fillStyle = gg; ctx.fillRect(0, scanY, W, 40);
-      const bx = W * 0.15, by = H * 0.18, bw = W * 0.70, bh = H * 0.64, bLen = Math.min(bw, bh) * 0.09, alpha = 0.4 + 0.3 * Math.sin(t * 2);
-      ctx.strokeStyle = `rgba(232,96,28,${alpha})`; ctx.lineWidth = 2;
-      [[bx, by, 1, 1], [bx + bw, by, -1, 1], [bx, by + bh, 1, -1], [bx + bw, by + bh, -1, -1]].forEach(([cx, cy, dx, dy]) => { ctx.beginPath(); ctx.moveTo(cx + dx * bLen, cy); ctx.lineTo(cx, cy); ctx.lineTo(cx, cy + dy * bLen); ctx.stroke(); });
-      ctx.strokeStyle = `rgba(232,96,28,${0.08 + 0.04 * Math.sin(t * 1.5)})`; ctx.lineWidth = 0.5; ctx.setLineDash([6, 10]);
-      ctx.beginPath(); ctx.moveTo(bx, by + bh / 3); ctx.lineTo(bx + bw, by + bh / 3); ctx.moveTo(bx, by + 2 * bh / 3); ctx.lineTo(bx + bw, by + 2 * bh / 3); ctx.moveTo(bx + bw / 3, by); ctx.lineTo(bx + bw / 3, by + bh); ctx.moveTo(bx + 2 * bw / 3, by); ctx.lineTo(bx + 2 * bw / 3, by + bh); ctx.stroke(); ctx.setLineDash([]); ctx.restore();
-    }
-
-    function drawAROverlay(ctx, r, t) {
-      ctx.save(); const bLen = Math.min(r.w, r.h) * 0.1; ctx.strokeStyle = 'rgba(232,96,28,0.7)'; ctx.lineWidth = 2; ctx.shadowBlur = 0;
-      [[r.x, r.y, 1, 1], [r.x + r.w, r.y, -1, 1], [r.x, r.y + r.h, 1, -1], [r.x + r.w, r.y + r.h, -1, -1]].forEach(([cx, cy, dx, dy]) => { ctx.beginPath(); ctx.moveTo(cx + dx * bLen, cy); ctx.lineTo(cx, cy); ctx.lineTo(cx, cy + dy * bLen); ctx.stroke(); });
-      ctx.restore();
-    }
-
-    function positionHotspots(canvas, r) {
-      const cr = canvas.getBoundingClientRect(), vp = document.querySelector('.camera-viewport').getBoundingClientRect();
-      const sx = cr.width / canvas.width, sy = cr.height / canvas.height;
-      HOTSPOTS.forEach(def => { const el = document.getElementById(def.id); if (!el) return; el.style.left = ((r.x + def.rx * r.w) * sx + cr.left - vp.left) + 'px'; el.style.top = ((r.y + def.ry * r.h) * sy + cr.top - vp.top) + 'px'; el.style.position = 'absolute'; });
-    }
-
-    /* ── BIRD RANDOMISATION ─────────────────────────────────────────────────────
-       Each bird is assigned to a guaranteed-distinct 120° sector of Y rotation
-       so all three birds face clearly different directions simultaneously.
-       Within each sector there's ±50° of random variation for organic feel.
-       Scale, duration, delay, and float path are all independently varied.
-    ─────────────────────────────────────────────────────────────────────────── */
-    function initialiseBirds() {
-      if (birdsInitialised) return; birdsInitialised = true;
-      const floatAnims = ['birdFloat1', 'birdFloat2', 'birdFloat3', 'birdFloat4', 'birdFloat5'];
-      // Three non-overlapping 120° sectors — birds guaranteed different angles
-      const sectors = [
-        { base: -60, spread: 100 },   // bird 1: roughly facing left   (−110° to −10°)
-        { base: 60, spread: 100 },   // bird 2: roughly facing right  (+10° to +110°)
-        { base: 180, spread: 100 },   // bird 3: roughly facing away   (130° to 230°)
-      ];
-      ['mv1wrap', 'mv2wrap', 'mv3wrap'].forEach((id, i) => {
-        const wrap = document.getElementById(id); if (!wrap) return;
-        const sector = sectors[i];
-        const rotateY = (sector.base + (Math.random() - 0.5) * sector.spread).toFixed(1);
-        const scaleX = Math.random() > 0.5 ? 1 : -1;
-        // Scale steps meaningfully apart (0.72, 0.87, 1.02 base + random)
-        const baseScale = (0.72 + i * 0.15 + Math.random() * 0.18).toFixed(3);
-        // Duration steps: ~7s, ~9.5s, ~12s + random so no two share a rhythm
-        const duration = (7 + i * 2.5 + Math.random() * 3).toFixed(2);
-        // Delay stepped by 2.2s + random so cycle offsets are clearly different
-        const delay = (-(i * 2.2 + Math.random() * 2)).toFixed(2);
-        // Assign distinct float path per bird (cycle through 3 of the 5)
-        const anim = floatAnims[i % floatAnims.length];
-        wrap.style.perspective = '600px'; wrap.style.perspectiveOrigin = '50% 50%';
-        const iframe = wrap.querySelector('iframe');
-        if (iframe) { iframe.style.transform = `scaleX(${scaleX}) rotateY(${rotateY}deg) scale(${baseScale})`; iframe.style.transformOrigin = 'center center'; iframe.style.transition = 'none'; iframe.style.height = '108%'; iframe.style.width = '100%'; }
-        wrap.style.animation = `${anim} ${duration}s ease-in-out ${delay}s infinite`; wrap.style.animationFillMode = 'both';
-      });
-    }
-
-    function positionGLBOverlays(canvas, r) {
-      const cr = canvas.getBoundingClientRect(), vp = document.querySelector('.camera-viewport').getBoundingClientRect();
-      const sx = cr.width / canvas.width, sy = cr.height / canvas.height;
-      const wx = (r.x * sx) + cr.left - vp.left, wy = (r.y * sy) + cr.top - vp.top, ww = r.w * sx, wh = r.h * sy;
-      const s1 = Math.min(ww * 0.55, wh * 0.50);
-
-      // Bird 1 — anchored to detected blue-bird painting location (or default upper-centre)
-      const b1x = blueBirdPos ? blueBirdPos.rx : 0.50;
-      const b1y = blueBirdPos ? blueBirdPos.ry : 0.22;
-      const w1 = document.getElementById('mv1wrap');
-      if (w1) w1.style.cssText = `position:absolute;width:${s1}px;height:${s1}px;left:${wx + ww * b1x - s1 * 0.5}px;top:${wy + wh * b1y - s1 * 0.3}px;overflow:hidden;`;
-
-      // Bird 2 — lower right, fixed relative position
-      const s2 = s1 * 0.62, w2 = document.getElementById('mv2wrap');
-      if (w2) w2.style.cssText = `position:absolute;width:${s2}px;height:${s2}px;left:${wx + ww * 0.62}px;top:${wy + wh * 0.55}px;overflow:hidden;`;
-
-      // Bird 3 — left side, fixed relative position
-      const s3 = s1 * 0.52, w3 = document.getElementById('mv3wrap');
-      if (w3) w3.style.cssText = `position:absolute;width:${s3}px;height:${s3}px;left:${wx + ww * 0.04}px;top:${wy + wh * 0.40}px;overflow:hidden;`;
-    }
-
-    function setDetectHUD(found) {
-      const el = document.getElementById('detectVal'); if (!el) return;
-      if (found) { el.textContent = 'Detected ✦'; el.classList.add('found'); }
-      else { el.textContent = 'Scanning…'; el.classList.remove('found'); }
-    }
-
-    function updateTime() { const now = new Date(), el = document.getElementById('hudTime'); if (el) el.textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0'); }
-    updateTime(); setInterval(updateTime, 30000);
-
-    function makeParticles(id, count, color) {
-      const el = document.getElementById(id); if (!el) return;
-      for (let i = 0; i < count; i++) { const p = document.createElement('div'); const size = Math.random() > 0.5 ? 2 : 1; p.style.cssText = `position:absolute;width:${size}px;height:${size}px;border-radius:50%;background:${color};left:${5 + Math.random() * 90}%;bottom:${Math.random() * 50}%;animation:particleRise ${5 + Math.random() * 8}s linear ${-Math.random() * 8}s infinite;opacity:0;`; el.appendChild(p); }
-    }
-    makeParticles('arParticles', 16, 'rgba(232,96,28,0.5)');
-    makeParticles('storyParticles', 10, 'rgba(232,96,28,0.4)');
-
-    let audio = new Audio(); audio.loop = true; let audioMuted = false;
-    function getTimeBasedSrc() { const h = new Date().getHours(); if (h >= 5 && h < 12) return './audio/morning.mp3'; if (h >= 12 && h < 18) return './audio/afternoon.mp3'; return './audio/evening.mp3'; }
-    function playAudio() { const src = getTimeBasedSrc(); if (audio.src !== src) audio.src = src; audio.volume = 0.6; audio.play().catch(() => { }); }
-    function toggleAudio() {
-      audioMuted = !audioMuted; const btn = document.getElementById('audioBtn'), icon = document.getElementById('audioIcon'), label = document.getElementById('audioLabel');
-      if (audioMuted) { audio.pause(); btn.classList.add('ctrl-active'); icon.textContent = '✕'; label.textContent = 'Muted'; }
-      else { playAudio(); btn.classList.remove('ctrl-active'); icon.textContent = '♪'; label.textContent = 'Audio'; }
-    }
-
-    function toggleInfoPoints() {
-      infoVisible = !infoVisible; const btn = document.getElementById('infoBtn'), icon = document.getElementById('infoIcon'), label = document.getElementById('infoLabel');
-      document.querySelectorAll('.ar-object').forEach(obj => { obj.classList.toggle('visible', infoVisible); });
-      if (infoVisible) { btn.classList.add('ctrl-active'); icon.textContent = '◉'; label.textContent = 'Hide'; }
-      else { btn.classList.remove('ctrl-active'); icon.textContent = '◎'; label.textContent = 'Info'; }
-    }
-
-    const products = {
-      scarf: { tag: "Carré d'Hermès", name: 'Brides de Gala', desc: 'First designed in 1957 by Hugo Grygkar, this iconic carré depicts the ceremony of the grand harness — gilded bridles, medallions, and stirrups arranged in conversation with one another. Printed in Lyon on 90cm twill silk.', material: 'Twill Silk', artisan: 'Lyonnais', origin: 'Lyon, France' },
-      bag: { tag: 'Maroquinerie', name: 'Kelly 28 Sellier', desc: "Named for Grace Kelly in 1977 — though it existed since 1935 as the Sac à dépêches. This sellier construction requires a single artisan eight to twelve hours to complete. Each stitch is hand-sewn with linen thread and a saddle-maker's knot.", material: 'Togo Leather', artisan: 'Pantin Atelier', origin: 'Pantin, France' },
-      silk: { tag: 'Soierie', name: 'Gavroche Quadrillé', desc: 'The gavroche — smaller cousin to the grand carré — arrived in the 1970s. This hand-rolled 45cm square uses the same silk and screen-printing processes as the full scarf, with up to 27 separate screens and 18 months from sketch to production.', material: 'Habutai Silk', artisan: 'Bourgoin-Jallieu', origin: 'Isère, France' }
-    };
-    function showProduct(id) { const p = products[id]; document.getElementById('popupTag').textContent = p.tag; document.getElementById('popupName').textContent = p.name; document.getElementById('popupDesc').textContent = p.desc; document.getElementById('popupMaterial').textContent = p.material; document.getElementById('popupArtisan').textContent = p.artisan; document.getElementById('popupOrigin').textContent = p.origin; document.getElementById('productPopup').classList.add('visible'); }
-    function closeProduct() { document.getElementById('productPopup').classList.remove('visible'); }
-    function openGuide() { document.getElementById('infoModal').classList.add('open'); }
-    function closeGuide(e) { if (!e || e.target === document.getElementById('infoModal')) document.getElementById('infoModal').classList.remove('open'); }
-    function downloadFile(src, filename) {
-      const toast = document.getElementById('toast'); toast.textContent = filename.replace('hermes-', '').replace('.jpeg', '') + '  preparing…'; toast.classList.add('show');
-      fetch(src).then(res => { if (!res.ok) throw new Error(); return res.blob(); }).then(blob => { const url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); toast.textContent = filename.split('hermes-')[1].replace('.jpeg', '').replace(/-/g, ' ') + '  saved ✓'; setTimeout(() => toast.classList.remove('show'), 3000); }).catch(() => { toast.textContent = 'File not yet available'; setTimeout(() => toast.classList.remove('show'), 2500); });
-    }
-  </script>
-  <style>
-    @keyframes particleRise {
-      0% {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      30% {
-        opacity: 0.5;
-      }
-
-      70% {
-        opacity: 0.5;
-      }
-
-      100% {
-        opacity: 0;
-        transform: translateY(-60px) translateX(10px);
-      }
-    }
-  </style>
+    windowStable = Math.min(windowStable+1, 40);
+  } else {
+    windowStable = Math.max(0, windowStable-1);
+    if (windowStable === 0) windowRect = null;
+  }
+}
+ 
+/* Draw scanning animation while no window is detected yet */
+function drawScanOverlay(ctx, W, H, t) {
+  ctx.save();
+ 
+  // Travelling horizontal scan line across full screen
+  const scanY = ((t * 0.15) % 1) * H;
+  const grd = ctx.createLinearGradient(0, 0, W, 0);
+  grd.addColorStop(0,    'rgba(232,96,28,0)');
+  grd.addColorStop(0.25, 'rgba(232,96,28,0.45)');
+  grd.addColorStop(0.5,  'rgba(245,165,112,0.85)');
+  grd.addColorStop(0.75, 'rgba(232,96,28,0.45)');
+  grd.addColorStop(1,    'rgba(232,96,28,0)');
+  ctx.strokeStyle = grd;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(0, scanY);
+  ctx.lineTo(W, scanY);
+  ctx.stroke();
+ 
+  // Faint trailing glow below scan line
+  const glowGrd = ctx.createLinearGradient(0, scanY, 0, scanY + 40);
+  glowGrd.addColorStop(0, 'rgba(232,96,28,0.08)');
+  glowGrd.addColorStop(1, 'rgba(232,96,28,0)');
+  ctx.fillStyle = glowGrd;
+  ctx.fillRect(0, scanY, W, 40);
+ 
+  // Corner search brackets — centred in viewport, pulsing
+  const bx = W * 0.15, by = H * 0.18;
+  const bw = W * 0.70, bh = H * 0.64;
+  const bLen = Math.min(bw, bh) * 0.09;
+  const alpha = 0.4 + 0.3 * Math.sin(t * 2);
+  ctx.strokeStyle = `rgba(232,96,28,${alpha})`;
+  ctx.lineWidth = 2;
+  [
+    [bx,      by,      1,  1],
+    [bx+bw,   by,     -1,  1],
+    [bx,      by+bh,   1, -1],
+    [bx+bw,   by+bh,  -1, -1],
+  ].forEach(([cx, cy, dx, dy]) => {
+    ctx.beginPath();
+    ctx.moveTo(cx + dx*bLen, cy);
+    ctx.lineTo(cx, cy);
+    ctx.lineTo(cx, cy + dy*bLen);
+    ctx.stroke();
+  });
+ 
+  // Dashed search grid lines
+  ctx.strokeStyle = `rgba(232,96,28,${0.08 + 0.04*Math.sin(t*1.5)})`;
+  ctx.lineWidth = 0.5;
+  ctx.setLineDash([6, 10]);
+  // Horizontal thirds
+  ctx.beginPath();
+  ctx.moveTo(bx, by + bh/3); ctx.lineTo(bx+bw, by + bh/3);
+  ctx.moveTo(bx, by + 2*bh/3); ctx.lineTo(bx+bw, by + 2*bh/3);
+  // Vertical thirds
+  ctx.moveTo(bx + bw/3, by); ctx.lineTo(bx + bw/3, by+bh);
+  ctx.moveTo(bx + 2*bw/3, by); ctx.lineTo(bx + 2*bw/3, by+bh);
+  ctx.stroke();
+  ctx.setLineDash([]);
+ 
+  ctx.restore();
+}
+ 
+/* Draw AR overlays once window is detected — corner brackets only */
+function drawAROverlay(ctx, r, t) {
+  ctx.save();
+ 
+  // Corner bracket markers only — clean detection indicator, no other animation
+  const bLen = Math.min(r.w, r.h) * 0.1;
+  ctx.strokeStyle = 'rgba(232,96,28,0.7)';
+  ctx.lineWidth = 2;
+  ctx.shadowBlur = 0;
+  [
+    [r.x,       r.y,        1,  1],
+    [r.x+r.w,   r.y,       -1,  1],
+    [r.x,       r.y+r.h,    1, -1],
+    [r.x+r.w,   r.y+r.h,   -1, -1],
+  ].forEach(([cx, cy, dx, dy]) => {
+    ctx.beginPath();
+    ctx.moveTo(cx+dx*bLen, cy); ctx.lineTo(cx, cy); ctx.lineTo(cx, cy+dy*bLen);
+    ctx.stroke();
+  });
+ 
+  ctx.restore();
+}
+ 
+/* Position DOM hotspots over the detected window rect */
+function positionHotspots(canvas, r) {
+  const canvasRect = canvas.getBoundingClientRect();
+  const vpRect = document.querySelector('.camera-viewport').getBoundingClientRect();
+  const sx = canvasRect.width  / canvas.width;
+  const sy = canvasRect.height / canvas.height;
+ 
+  HOTSPOTS.forEach(def => {
+    const el = document.getElementById(def.id);
+    if (!el) return;
+    const px = (r.x + def.rx * r.w) * sx + canvasRect.left - vpRect.left;
+    const py = (r.y + def.ry * r.h) * sy + canvasRect.top  - vpRect.top;
+    el.style.left = px + 'px';
+    el.style.top  = py + 'px';
+    el.style.position = 'absolute';
+  });
+}
+ 
+/* Draw animated birds onto a separate canvas layered above the AR canvas.
+   These silhouette birds reference ./assets/birds.abc visually —
+   swap for model-viewer once the file is converted to .glb */
+function drawBirdsOntoCanvas(arCanvas, r, t) {
+  const bc = document.getElementById('birdCanvas');
+  if (!bc) return;
+ 
+  // Match birdCanvas dimensions to the AR canvas
+  if (bc.width !== arCanvas.width || bc.height !== arCanvas.height) {
+    bc.width  = arCanvas.width;
+    bc.height = arCanvas.height;
+  }
+ 
+  // Fade in
+  bc.style.opacity = '1';
+ 
+  const ctx = bc.getContext('2d');
+  ctx.clearRect(0, 0, bc.width, bc.height);
+ 
+  // Draw each bird from the BIRDS pool, clipped loosely to window area
+  BIRDS.forEach(b => {
+    // Bird path moves in a gentle figure-of-eight within the window
+    const loopX = r.x + (b.cx + Math.sin(t * b.speedX + b.phase) * b.rx) * r.w;
+    const loopY = r.y + (b.cy + Math.sin(t * b.speedY + b.phase * 0.7) * b.ry) * r.h;
+ 
+    // Wing flap: oscillate between open and closed
+    const flap = Math.abs(Math.sin(t * b.flapRate + b.phase));
+ 
+    ctx.save();
+    ctx.translate(loopX, loopY);
+    ctx.scale(b.size, b.size);
+ 
+    // Draw bird silhouette: body + two wings
+    const wingSpan = 18;
+    const wingH    = 7 * flap; // wings flatten at top of flap
+ 
+    ctx.beginPath();
+    // Body (small oval)
+    ctx.ellipse(0, 0, 4, 2, 0, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(232,96,28,${0.55 + 0.25 * Math.sin(t + b.phase)})`;
+    ctx.fill();
+ 
+    // Left wing
+    ctx.beginPath();
+    ctx.moveTo(-2, 0);
+    ctx.quadraticCurveTo(-wingSpan * 0.5, -wingH, -wingSpan, 1);
+    ctx.quadraticCurveTo(-wingSpan * 0.5, wingH * 0.3, -2, 0);
+    ctx.fillStyle = `rgba(232,96,28,${0.4 + 0.2 * flap})`;
+    ctx.fill();
+ 
+    // Right wing
+    ctx.beginPath();
+    ctx.moveTo(2, 0);
+    ctx.quadraticCurveTo(wingSpan * 0.5, -wingH, wingSpan, 1);
+    ctx.quadraticCurveTo(wingSpan * 0.5, wingH * 0.3, 2, 0);
+    ctx.fillStyle = `rgba(232,96,28,${0.4 + 0.2 * flap})`;
+    ctx.fill();
+ 
+    // Subtle glow
+    ctx.shadowColor = 'rgba(232,96,28,0.5)';
+    ctx.shadowBlur  = 8;
+    ctx.restore();
+  });
+}
+ 
+/* Position the three model-viewer wrappers over the detected window rect */
+function positionGLBOverlays(canvas, r) {
+  const canvasRect = canvas.getBoundingClientRect();
+  const vpRect = document.querySelector('.camera-viewport').getBoundingClientRect();
+  const sx = canvasRect.width  / canvas.width;
+  const sy = canvasRect.height / canvas.height;
+ 
+  const wx = (r.x * sx) + canvasRect.left - vpRect.left;
+  const wy = (r.y * sy) + canvasRect.top  - vpRect.top;
+  const ww = r.w * sx;
+  const wh = r.h * sy;
+ 
+  // GLB 1 — upper centre, largest
+  const s1 = Math.min(ww * 0.55, wh * 0.50);
+  const w1 = document.getElementById('mv1wrap');
+  if (w1) w1.style.cssText = `position:absolute;width:${s1}px;height:${s1}px;left:${wx + ww*0.5 - s1*0.5}px;top:${wy + wh*0.05}px;`;
+ 
+  // GLB 2 — lower right, medium
+  const s2 = s1 * 0.62;
+  const w2 = document.getElementById('mv2wrap');
+  if (w2) w2.style.cssText = `position:absolute;width:${s2}px;height:${s2}px;left:${wx + ww*0.60}px;top:${wy + wh*0.55}px;`;
+ 
+  // GLB 3 — left side, medium
+  const s3 = s1 * 0.52;
+  const w3 = document.getElementById('mv3wrap');
+  if (w3) w3.style.cssText = `position:absolute;width:${s3}px;height:${s3}px;left:${wx + ww*0.02}px;top:${wy + wh*0.38}px;`;
+}
+ 
+function setDetectHUD(found) {
+  const el = document.getElementById('detectVal');
+  if (!el) return;
+  if (found) { el.textContent = 'Detected ✦'; el.classList.add('found'); }
+  else       { el.textContent = 'Scanning…';  el.classList.remove('found'); }
+}
+ 
+/* ─── CLOCK ─── */
+function updateTime() {
+  const now = new Date();
+  const el = document.getElementById('hudTime');
+  if (el) el.textContent =
+    now.getHours().toString().padStart(2, '0') + ':' +
+    now.getMinutes().toString().padStart(2, '0');
+}
+updateTime();
+setInterval(updateTime, 30000);
+ 
+/* ─── PARTICLES ─── */
+function makeParticles(containerId, count, color) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    const size = Math.random() > 0.5 ? 2 : 1;
+    p.style.cssText = `
+      position:absolute;
+      width:${size}px; height:${size}px;
+      border-radius:50%; background:${color};
+      left:${5 + Math.random() * 90}%;
+      bottom:${Math.random() * 50}%;
+      animation:particleRise ${5 + Math.random() * 8}s linear ${-Math.random() * 8}s infinite;
+      opacity:0;
+    `;
+    el.appendChild(p);
+  }
+}
+makeParticles('arParticles', 16, 'rgba(232,96,28,0.5)');
+makeParticles('storyParticles', 10, 'rgba(232,96,28,0.4)');
+ 
+/* ─── AUDIO ─── */
+let audio = new Audio();
+audio.loop = true;
+let audioMuted = false;
+ 
+function getTimeBasedSrc() {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) return './audio/morning.mp3';
+  if (hour >= 12 && hour < 18) return './audio/afternoon.mp3';
+  return './audio/evening.mp3';
+}
+ 
+function playAudio() {
+  const src = getTimeBasedSrc();
+  if (audio.src !== src) audio.src = src;
+  audio.volume = 0.6;
+  audio.play().catch(() => {});
+}
+ 
+function toggleAudio() {
+  audioMuted = !audioMuted;
+  const btn   = document.getElementById('audioBtn');
+  const icon  = document.getElementById('audioIcon');
+  const label = document.getElementById('audioLabel');
+ 
+  if (audioMuted) {
+    audio.pause();
+    btn.classList.add('ctrl-active');
+    icon.textContent  = '✕';
+    label.textContent = 'Muted';
+  } else {
+    playAudio();
+    btn.classList.remove('ctrl-active');
+    icon.textContent  = '♪';
+    label.textContent = 'Audio';
+  }
+}
+ 
+/* ─── INFO POINTS TOGGLE ─── */
+// infoVisible is declared in the AR engine block above
+function toggleInfoPoints() {
+  infoVisible = !infoVisible;
+ 
+  const btn   = document.getElementById('infoBtn');
+  const icon  = document.getElementById('infoIcon');
+  const label = document.getElementById('infoLabel');
+ 
+  document.querySelectorAll('.ar-object').forEach(obj => {
+    obj.classList.toggle('visible', infoVisible);
+  });
+ 
+  if (infoVisible) {
+    btn.classList.add('ctrl-active');
+    icon.textContent  = '◉';
+    label.textContent = 'Hide';
+  } else {
+    btn.classList.remove('ctrl-active');
+    icon.textContent  = '◎';
+    label.textContent = 'Info';
+  }
+}
+ 
+/* ─── PRODUCTS ─── */
+const products = {
+  scarf: {
+    tag: "Carré d'Hermès", name: 'Brides de Gala',
+    desc: 'First designed in 1957 by Hugo Grygkar, this iconic carré depicts the ceremony of the grand harness — gilded bridles, medallions, and stirrups arranged in conversation with one another. Printed in Lyon on 90cm twill silk.',
+    material: 'Twill Silk', artisan: 'Lyonnais', origin: 'Lyon, France'
+  },
+  bag: {
+    tag: 'Maroquinerie', name: 'Kelly 28 Sellier',
+    desc: "Named for Grace Kelly in 1977 — though it existed since 1935 as the Sac à dépêches. This sellier construction requires a single artisan eight to twelve hours to complete. Each stitch is hand-sewn with linen thread and a saddle-maker's knot.",
+    material: 'Togo Leather', artisan: 'Pantin Atelier', origin: 'Pantin, France'
+  },
+  silk: {
+    tag: 'Soierie', name: 'Gavroche Quadrillé',
+    desc: 'The gavroche — smaller cousin to the grand carré — arrived in the 1970s. This hand-rolled 45cm square uses the same silk and screen-printing processes as the full scarf, with up to 27 separate screens and 18 months from sketch to production.',
+    material: 'Habutai Silk', artisan: 'Bourgoin-Jallieu', origin: 'Isère, France'
+  }
+};
+ 
+function showProduct(id) {
+  const p = products[id];
+  document.getElementById('popupTag').textContent      = p.tag;
+  document.getElementById('popupName').textContent     = p.name;
+  document.getElementById('popupDesc').textContent     = p.desc;
+  document.getElementById('popupMaterial').textContent = p.material;
+  document.getElementById('popupArtisan').textContent  = p.artisan;
+  document.getElementById('popupOrigin').textContent   = p.origin;
+  document.getElementById('productPopup').classList.add('visible');
+}
+ 
+function closeProduct() {
+  document.getElementById('productPopup').classList.remove('visible');
+}
+ 
+/* ─── GUIDE MODAL ─── */
+function openGuide() {
+  document.getElementById('infoModal').classList.add('open');
+}
+function closeGuide(e) {
+  if (!e || e.target === document.getElementById('infoModal')) {
+    document.getElementById('infoModal').classList.remove('open');
+  }
+}
+ 
+/* ─── DOWNLOAD ─── */
+function downloadFile(src, filename) {
+  const toast = document.getElementById('toast');
+  toast.textContent = filename.replace('hermes-','').replace('.jpeg','') + ' — preparing…';
+  toast.classList.add('show');
+ 
+  fetch(src)
+    .then(res => {
+      if (!res.ok) throw new Error('File not found');
+      return res.blob();
+    })
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      const a   = document.createElement('a');
+      a.href     = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast.textContent = filename.split('hermes-')[1].replace('.jpeg','').replace(/-/g,' ') + ' — saved ✓';
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    })
+    .catch(() => {
+      toast.textContent = 'File not yet available';
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    });
+}
+</script>
+ 
+<style>
+@keyframes particleRise {
+  0%   { opacity: 0; transform: translateY(10px); }
+  30%  { opacity: 0.5; }
+  70%  { opacity: 0.5; }
+  100% { opacity: 0; transform: translateY(-60px) translateX(10px); }
+}
+</style>
 </body>
-
 </html>
