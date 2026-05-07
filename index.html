@@ -231,11 +231,11 @@ body {
   pointer-events: none;
   opacity: 0;
   transform: translate(-50%, -50%);
-  width: 28vw;
-  height: 28vw;
-  min-width: 120px;
-  min-height: 120px;
-  transition: opacity 1s ease;
+  width: 6vw;
+  height: 6vw;
+  min-width: 90px;
+  min-height: 90px;
+  transition: opacity 1.5s ease;
 }
 .bird-overlay.visible {
   opacity: 1;
@@ -537,10 +537,10 @@ body {
 .kp-label { padding:12px 14px; border-top:1px solid var(--border); }
 .kp-type { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--orange); margin-bottom:3px; }
 .kp-name { font-family:'Cormorant Garamond',serif; font-size:15px; font-style:italic; color:var(--brown); margin-bottom:8px; }
-.kp-dl-btn { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; letter-spacing:0.01em; color:var(--orange); cursor:pointer; background:rgba(232,96,28,0.08); border:none; padding:8px 14px; border-radius:20px; font-family:'Manrope',sans-serif; transition:background 0.2s ease,transform 0.15s ease; }
+.kp-dl-btn { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:600; color:var(--orange); cursor:pointer; background:rgba(232,96,28,0.08); border:none; padding:8px 14px; border-radius:20px; font-family:'Manrope',sans-serif; transition:background 0.2s ease,transform 0.15s ease; }
 .kp-dl-btn:hover { background:rgba(232,96,28,0.14); }
 .kp-dl-btn:active { transform:scale(0.96); }
-.kp-dl-icon { width:20px; height:20px; border:1px solid var(--orange); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--orange); }
+.kp-dl-icon { width:18px; height:18px; border:1px solid var(--orange); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--orange); }
 
 /* Toast */
 .toast {
@@ -684,23 +684,23 @@ body {
   <div data-scroll class="scroll-inner" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;height:calc(100dvh - 56px);">
     <div class="story-hero">
       <div class="story-season">Wall Street· Spring · 2026</div>
-      <h2 class="story-title">Take to The Skies<h2>
       <div class="story-window-wrap">
         <img src="./wallstwin.jpg" alt="Through The Looking Glass window display" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
       </div>
-      <div class="story-artist-card">
+      <h2 class="story-title">Take to The Skies<h2></h2>
+      <!-- <div class="story-artist-card">
         <div class="artist-avatar">TL</div>
         <div>
           <div class="artist-name">Tim Lahan</div>
           <div class="artist-role">Artist · Illustrator</div>
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="story-concept">
       <div class="section-label">The Concept</div>
-      <div class="concept-quote">"I wanted the window to add a level of whimsy, yet has more than to the eye"</div>
-      <p class="concept-body">Drawing on early 2000s claymation. .</p>
-    </div>ß
+      <div class="concept-quote">Escape to the clouds as gravity leaves the room! We're going up, and although we may not know why, we're secretly excited to find a new peace of mind.</div>
+      <!-- <p class="concept-body">Escape to the clouds as gravity leaves the room! We're going up, and although we may not know why, we're secretly excited to find a new peace of mind.</p> -->
+    </div>
     <div class="story-keepsakes">
       <div class="keepsakes-title">Digital Keepsakes</div>
       <div class="keepsakes-sub">Yours to keep · Download free</div>
@@ -713,18 +713,18 @@ body {
           <div class="kp-label">
             <div class="kp-type">Window</div>
             <div class="kp-name">Photographed by Skot Yobaggy</div>
-            <button class="kp-dl-btn" onclick="downloadFile('./download/wallp1.jpeg','hermes-la-soie-libre.jpeg')"><div class="kp-dl-icon">↓</div>Download</button>
+            <button class="kp-dl-btn" onclick="downloadFile('./wallstwin2.jpg')"><div class="kp-dl-icon">↓</div>Download</button>
           </div>
         </div>
         <div class="keepsake-card">
           <div class="keepsake-preview kp-bg-2">
-            <img src="./download/wallp2.jpeg" alt="Fenêtre, Minuit" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
-            <div class="kp-anim-window" style="position:absolute;inset:15%;"></div>
+            <img src="./welcome.png" alt="Fenêtre, Minuit" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
+            <!-- <div class="kp-anim-window" style="position:absolute;inset:15%;"></div> -->
           </div>
           <div class="kp-label">
             <div class="kp-type">Illustration</div>
             <div class="kp-name">Animated by Amanda</div>
-            <button class="kp-dl-btn" onclick="downloadFile('./download/wallp2.jpeg','hermes-fenetre-minuit.jpeg')"><div class="kp-dl-icon">↓</div>Download</button>
+            <button class="kp-dl-btn" onclick="downloadFile('./welcome.mp4')"><div class="kp-dl-icon">↓</div>Download</button>
           </div>
         </div>
       </div>
