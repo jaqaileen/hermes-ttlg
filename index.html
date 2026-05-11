@@ -218,13 +218,21 @@ body {
   pointer-events: none;
 }
 
-@keyframes birdFloat {
-  0%   { transform: translate(-50%, -50%) rotate(var(--bird-rot, 0deg)) translateY(0px); }
-  50%  { transform: translate(-50%, -50%) rotate(var(--bird-rot, 0deg)) translateY(var(--bird-drift, -6px)); }
-  100% { transform: translate(-50%, -50%) rotate(var(--bird-rot, 0deg)) translateY(0px); }
+/* Fly off from resting position — 3 s */
+@keyframes birdFlyOff {
+  0%   { transform: translate(-50%,-50%) rotate(var(--bird-rot,0deg));                                                                     opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--fly-dx,0px)), calc(-50% + var(--fly-dy,-200px))) rotate(var(--bird-rot,0deg));             opacity: 0; }
+}
+/* Full relaunch: 0.5 s fade-in + 2 s hold + 3 s fly-off = 5.5 s */
+@keyframes birdLaunch {
+  0%   { transform: translate(-50%,-50%) rotate(var(--bird-rot,0deg));                                                                     opacity: 0; }
+  9%   { transform: translate(-50%,-50%) rotate(var(--bird-rot,0deg));                                                                     opacity: 1; }
+  27%  { transform: translate(-50%,-50%) rotate(var(--bird-rot,0deg)) translateY(var(--bird-drift,-5px));                                  opacity: 1; }
+  45%  { transform: translate(-50%,-50%) rotate(var(--bird-rot,0deg));                                                                     opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--fly-dx,0px)), calc(-50% + var(--fly-dy,-200px))) rotate(var(--bird-rot,0deg));             opacity: 0; }
 }
 
-/* Static bird overlays — fixed positions, fade in on detection */
+/* Bird overlays — positioned by JS */
 .bird-overlay {
   position: absolute;
   z-index: 4;
@@ -235,13 +243,34 @@ body {
   height: 6vw;
   min-width: 90px;
   min-height: 90px;
-  transition: opacity 1.5s ease;
+  transition: opacity 0.5s ease;
 }
-.bird-overlay.visible {
-  opacity: 1;
-  animation: birdFloat var(--bird-dur, 4s) var(--bird-delay, 0s) ease-in-out infinite;
-}
+.bird-overlay.visible   { opacity: 1; }
+.bird-overlay.flying    { animation: birdFlyOff  3s   ease-in-out forwards; transition: none; }
+.bird-overlay.launching { animation: birdLaunch  5.5s ease-in-out forwards; transition: none; }
 .bird-overlay iframe { width: 100%; height: 100%; border: none; background: transparent; }
+
+/* Glowing orange dots anchored to display objects */
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 6px 3px rgba(232,96,28,0.9), 0 0 18px 8px rgba(232,96,28,0.4); transform: translate(-50%,-50%) scale(1); }
+  50%       { box-shadow: 0 0 12px 5px rgba(232,96,28,1),  0 0 32px 14px rgba(232,96,28,0.55); transform: translate(-50%,-50%) scale(1.15); }
+}
+.glow-dot {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--orange);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 1s ease;
+}
+.glow-dot.visible {
+  opacity: 1;
+  animation: dotPulse var(--dot-dur, 2s) var(--dot-delay, 0s) ease-in-out infinite;
+}
 
 /* Scan hint */
 #scanHint {
@@ -644,6 +673,11 @@ body {
       </iframe>
     </div>
 
+    <div id="glowDot1" class="glow-dot"></div>
+    <div id="glowDot2" class="glow-dot"></div>
+    <div id="glowDot3" class="glow-dot"></div>
+    <div id="glowDot4" class="glow-dot"></div>
+
     <div id="scanHint">Point camera at the Hermès window</div>
 
     <div class="camera-hud">
@@ -661,6 +695,10 @@ body {
       <button class="cam-ctrl-btn" id="audioBtn" onclick="toggleAudio()">
         <div class="cam-ctrl-icon" id="audioIcon">♪</div>
         <div class="cam-ctrl-label" id="audioLabel">Audio</div>
+      </button>
+      <button class="cam-ctrl-btn" id="animateBtn" onclick="animateBirds()">
+        <div class="cam-ctrl-icon">✦</div>
+        <div class="cam-ctrl-label">Animate</div>
       </button>
       <button class="cam-ctrl-btn" onclick="openGuide()">
         <div class="cam-ctrl-icon">?</div>
@@ -713,7 +751,7 @@ body {
           <div class="kp-label">
             <div class="kp-type">Window</div>
             <div class="kp-name">Photographed by Skot Yobaggy</div>
-            <button class="kp-dl-btn" onclick="downloadFile('./wallstwin2.jpg')"><div class="kp-dl-icon">↓</div>Download</button>
+            <button class="kp-dl-btn" onclick="downloadFile('./wallstwin2.jpg', 'hermes-window.jpg')"><div class="kp-dl-icon">↓</div>Download</button>
           </div>
         </div>
         <div class="keepsake-card">
@@ -724,7 +762,7 @@ body {
           <div class="kp-label">
             <div class="kp-type">Illustration</div>
             <div class="kp-name">Animated by Amanda</div>
-            <button class="kp-dl-btn" onclick="downloadFile('./welcome.mp4')"><div class="kp-dl-icon">↓</div>Download</button>
+            <button class="kp-dl-btn" onclick="downloadFile('./welcome.png', 'hermes-illustration.png')"><div class="kp-dl-icon">↓</div>Download</button>
           </div>
         </div>
       </div>
@@ -807,8 +845,16 @@ let windowStable = 0;
 // Fixed centre positions for each bird element (as fractions of canvas size).
 // Defaults match the known positions in the Hermès window installation;
 // updated each detection frame by centroid analysis.
-const bird1Cx = 0.73, bird1Cy = 0.27; // clouds painting center (yellow frame, upper-right)
-const bird2Cx = 0.38, bird2Cy = 0.52; // bottom-right of horse painting (upper-left)
+const bird1Cx = 0.60, bird1Cy = 0.44; // upper-left of clouds painting (yellow frame)
+const bird2Cx = 0.30, bird2Cy = 0.28; // bottom-right of horse painting (upper-left)
+
+// // Glow dot positions — fractions within windowRect, matching magenta dots in reference photo
+// const dots = [
+//   { id: 'glowDot1', cx: 0.16, cy: 0.75 }, // left — round side table / red bag
+//   { id: 'glowDot2', cx: 0.42, cy: 0.70 }, // center-left — open book on chair
+//   { id: 'glowDot3', cx: 0.55, cy: 0.70 }, // center-right — floating boots
+//   { id: 'glowDot4', cx: 0.74, cy: 0.85 }, // lower-right — white box items
+// ];
 
 async function startCamera() {
   try {
@@ -873,6 +919,7 @@ function arLoop() {
     setDetectHUD(true);
     document.getElementById('scanHint').style.opacity = '0';
     positionBirdOverlays(canvas);
+    positionDots(canvas);
     showBirds();
   } else {
     drawScanOverlay(ctx, canvas.width, canvas.height, arAnimTime);
@@ -916,26 +963,33 @@ function detectWindow(video, canvas) {
   let mintCount = 0, yellowCount = 0, skyCount = 0;
   let glareCount = 0, usableTotal = 0;
 
+  // Track bounding box of mint pixels in detBuf space
+  let minX = bw, maxX = 0, minY = bh, maxY = 0;
+
   for (let i = 0; i < total; i++) {
     const r = data[i * 4], g = data[i * 4 + 1], b = data[i * 4 + 2];
     const [h, s, l] = rgbToHsl(r, g, b);
 
-    // Glare: near-white, very low saturation — exclude from colour ratios
     if (l > 82 && s < 18) { glareCount++; continue; }
     usableTotal++;
 
-    // Whole-frame colour signatures for window identification
-    if (h >= 140 && h <= 200 && s >= 15 && s <= 80 && l >= 28 && l <= 72) mintCount++;
+    if (h >= 140 && h <= 200 && s >= 15 && s <= 80 && l >= 28 && l <= 72) {
+      mintCount++;
+      const xi = i % bw, yi = (i / bw) | 0;
+      if (xi < minX) minX = xi;
+      if (xi > maxX) maxX = xi;
+      if (yi < minY) minY = yi;
+      if (yi > maxY) maxY = yi;
+    }
     if (h >= 25  && h <= 70  && s >= 28 && l >= 38 && l <= 86) yellowCount++;
     if (h >= 180 && h <= 230 && s >= 15 && l >= 48 && l <= 90) skyCount++;
-
   }
 
-  const eff        = Math.max(usableTotal, 1);
-  const mintRatio  = mintCount   / eff;
-  const yellowRatio= yellowCount / eff;
-  const skyRatio   = skyCount    / eff;
-  const glareRatio = glareCount  / total;
+  const eff         = Math.max(usableTotal, 1);
+  const mintRatio   = mintCount   / eff;
+  const yellowRatio = yellowCount / eff;
+  const skyRatio    = skyCount    / eff;
+  const glareRatio  = glareCount  / total;
 
   const glareOnGlass = glareRatio > 0.08;
   const mintMin      = glareOnGlass ? 0.022 : 0.03;
@@ -945,12 +999,40 @@ function detectWindow(video, canvas) {
 
   if (detected) {
     windowStable = Math.min(windowStable + 1, 40);
-    windowRect = { x: canvas.width * 0.06, y: canvas.height * 0.06,
-                   w: canvas.width * 0.88, h: canvas.height * 0.88 };
+
+    // Scale detected bounds from detBuf → canvas space, with a small padding margin
+    const pad  = 0.04;
+    const scX  = canvas.width  / bw;
+    const scY  = canvas.height / bh;
+    const rawX = Math.max(0, (minX / bw - pad)) * canvas.width;
+    const rawY = Math.max(0, (minY / bh - pad)) * canvas.height;
+    const rawW = Math.min(canvas.width,  ((maxX - minX) / bw + pad * 2) * canvas.width);
+    const rawH = Math.min(canvas.height, ((maxY - minY) / bh + pad * 2) * canvas.height);
+
+    // Lerp toward the new rect so the overlay doesn't snap/jitter each frame
+    const alpha = windowRect ? 0.12 : 1.0;
+    windowRect = windowRect || { x: rawX, y: rawY, w: rawW, h: rawH };
+    windowRect.x += (rawX - windowRect.x) * alpha;
+    windowRect.y += (rawY - windowRect.y) * alpha;
+    windowRect.w += (rawW - windowRect.w) * alpha;
+    windowRect.h += (rawH - windowRect.h) * alpha;
   } else {
     windowStable = Math.max(0, windowStable - 1);
     if (windowStable === 0) windowRect = null;
   }
+}
+
+function positionDots(canvas) {
+  if (!windowRect) return;
+  const rect   = canvas.getBoundingClientRect();
+  const scaleX = rect.width  / canvas.width;
+  const scaleY = rect.height / canvas.height;
+  dots.forEach(({ id, cx, cy }) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.left = ((windowRect.x + cx * windowRect.w) * scaleX) + 'px';
+    el.style.top  = ((windowRect.y + cy * windowRect.h) * scaleY) + 'px';
+  });
 }
 
 function positionBirdOverlays(canvas) {
@@ -965,40 +1047,102 @@ function positionBirdOverlays(canvas) {
     { id: 'birdOverlay2', cx: bird2Cx, cy: bird2Cy },
   ].forEach(({ id, cx, cy }) => {
     const el = document.getElementById(id);
-    if (!el) return;
+    // Don't reposition mid-animation — that would fight the fly-off transform
+    if (!el || el.classList.contains('flying') || el.classList.contains('launching')) return;
     el.style.left = ((windowRect.x + cx * windowRect.w) * scaleX) + 'px';
     el.style.top  = ((windowRect.y + cy * windowRect.h) * scaleY) + 'px';
   });
 }
 
-let birdsVisible = false;
+let birdsState = 'hidden'; // 'hidden' | 'resting' | 'animating'
+
+function setAnimateBtn(active) {
+  document.getElementById('animateBtn')?.classList.toggle('ctrl-active', active);
+}
+
+function setFlyProps(overlay) {
+  const rot   = (Math.random() * 40 - 20).toFixed(1);
+  const drift = (4 + Math.random() * 6).toFixed(1);
+  const angle = Math.random() * Math.PI * 2;
+  const dist  = Math.hypot(window.innerWidth, window.innerHeight) * 1.3;
+  overlay.style.setProperty('--bird-rot',   `${rot}deg`);
+  overlay.style.setProperty('--bird-drift', `-${drift}px`);
+  overlay.style.setProperty('--fly-dx',     `${(Math.cos(angle) * dist).toFixed(0)}px`);
+  overlay.style.setProperty('--fly-dy',     `${(Math.sin(angle) * dist).toFixed(0)}px`);
+}
+
+function snapPosition(overlay, cx, cy) {
+  const canvas = document.getElementById('arCanvas');
+  if (!canvas || !windowRect) return;
+  const r = canvas.getBoundingClientRect();
+  overlay.style.left = ((windowRect.x + cx * windowRect.w) * (r.width  / canvas.width))  + 'px';
+  overlay.style.top  = ((windowRect.y + cy * windowRect.h) * (r.height / canvas.height)) + 'px';
+}
 
 function showBirds() {
-  if (birdsVisible) return;
-  birdsVisible = true;
-  ['birdOverlay1', 'birdOverlay2'].forEach(id => {
+  if (birdsState !== 'hidden') return;
+  birdsState = 'resting';
+  [{ id: 'birdOverlay1', cx: bird1Cx, cy: bird1Cy },
+   { id: 'birdOverlay2', cx: bird2Cx, cy: bird2Cy }].forEach(({ id, cx, cy }) => {
     const overlay = document.getElementById(id);
-    const iframe  = overlay.querySelector('iframe');
+    if (!overlay) return;
+    snapPosition(overlay, cx, cy);
+    const iframe = overlay.querySelector('iframe');
     if (iframe.src === 'about:blank') iframe.src = iframe.dataset.src;
-    const rot   = (Math.random() * 40 - 20).toFixed(1);        // –20° to +20°
-    const drift = (4 + Math.random() * 6).toFixed(1);          // 4–10 px vertical sway
-    const dur   = (3.5 + Math.random() * 2.5).toFixed(2);      // 3.5–6 s float cycle
-    const delay = (Math.random() * 1.5).toFixed(2);            // 0–1.5 s start offset
-    overlay.style.setProperty('--bird-rot',   `${rot}deg`);
-    overlay.style.setProperty('--bird-drift', `-${drift}px`);
-    overlay.style.setProperty('--bird-dur',   `${dur}s`);
-    overlay.style.setProperty('--bird-delay', `${delay}s`);
+    setFlyProps(overlay); // set random rot so each looks different at rest
+    overlay.classList.remove('flying', 'launching');
+    void overlay.offsetWidth;
     overlay.classList.add('visible');
   });
 }
 
 function hideBirds() {
-  if (!birdsVisible) return;
-  birdsVisible = false;
+  birdsState = 'hidden';
+  setAnimateBtn(false);
   ['birdOverlay1', 'birdOverlay2'].forEach(id => {
-    const overlay = document.getElementById(id);
-    overlay.classList.remove('visible');
+    document.getElementById(id).classList.remove('visible', 'flying', 'launching');
   });
+}
+
+function animateBirds() {
+  if (!windowRect || birdsState === 'animating') return;
+  birdsState = 'animating';
+  setAnimateBtn(true);
+  let done = 0;
+  const onDone = () => { if (++done >= 2) { birdsState = 'hidden'; setAnimateBtn(false); } };
+
+  if (birdsState === 'resting') {
+    // Birds already visible — fly them off directly (no hold needed)
+    ['birdOverlay1', 'birdOverlay2'].forEach(id => {
+      const overlay = document.getElementById(id);
+      setFlyProps(overlay);
+      overlay.classList.remove('visible', 'launching');
+      void overlay.offsetWidth;
+      overlay.classList.add('flying');
+      overlay.addEventListener('animationend', () => {
+        overlay.classList.remove('flying');
+        onDone();
+      }, { once: true });
+    });
+  } else {
+    // Birds are hidden — full 0.5 s fade-in + 2 s hold + 3 s fly-off
+    const launch = (id, cx, cy) => {
+      const overlay = document.getElementById(id);
+      snapPosition(overlay, cx, cy);
+      const iframe = overlay.querySelector('iframe');
+      if (iframe.src === 'about:blank') iframe.src = iframe.dataset.src;
+      setFlyProps(overlay);
+      overlay.classList.remove('visible', 'flying');
+      void overlay.offsetWidth;
+      overlay.classList.add('launching');
+      overlay.addEventListener('animationend', () => {
+        overlay.classList.remove('launching');
+        onDone();
+      }, { once: true });
+    };
+    launch('birdOverlay1', bird1Cx, bird1Cy);
+    setTimeout(() => launch('birdOverlay2', bird2Cx, bird2Cy), 600);
+  }
 }
 
 function drawScanOverlay(ctx, W, H, t) {
@@ -1113,8 +1257,10 @@ function closeGuide(e) {
 
 /* ─── DOWNLOAD ─── */
 function downloadFile(src, filename) {
+  if (!filename) filename = src.split('/').pop();
+  const label = filename.replace(/^hermes-/,'').replace(/\.[^.]+$/,'').replace(/-/g,' ');
   const toast = document.getElementById('toast');
-  toast.textContent = filename.replace('hermes-','').replace('.jpeg','') + ' — preparing…';
+  toast.textContent = label + ' — preparing…';
   toast.classList.add('show');
   fetch(src)
     .then(res => { if (!res.ok) throw new Error(); return res.blob(); })
@@ -1124,11 +1270,11 @@ function downloadFile(src, filename) {
       a.href = url; a.download = filename;
       document.body.appendChild(a); a.click();
       document.body.removeChild(a); URL.revokeObjectURL(url);
-      toast.textContent = filename.split('hermes-')[1].replace('.jpeg','').replace(/-/g,' ') + ' — saved ✓';
+      toast.textContent = label + ' — saved ✓';
       setTimeout(() => toast.classList.remove('show'), 3000);
     })
     .catch(() => {
-      toast.textContent = 'File not yet available';
+      toast.textContent = 'File not available';
       setTimeout(() => toast.classList.remove('show'), 2500);
     });
 }
