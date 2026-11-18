@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Through The Looking Glass — Hermès</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─── ROOT ─── */
+:root {
+  --orange: #E8601C;
+  --orange-light: #F07840;
+  --orange-pale: #FDF0E8;
+  --cream: #FAF8F4;
+  --ivory: #F5F2EC;
+  --warm-white: #FFFDF9;
+  --brown: #3A2A1C;
+  --brown-mid: #6B4C35;
+  --taupe: #A08060;
+  --taupe-light: #C8AD96;
+  --border: rgba(58,42,28,0.12);
+  --border-strong: rgba(58,42,28,0.25);
+  --shadow: 0 2px 20px rgba(58,42,28,0.08);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { font-size:16px; }
+
+body {
+  font-family:'Manrope', sans-serif;
+  background: var(--cream);
+  color: var(--brown);
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* ─── PAGE SYSTEM ─── */
+.page {
+  display: none;
+  height: 100dvh;
+  flex-direction: column;
+  background: var(--cream);
+  overflow: hidden;
+  overscroll-behavior: none;
+  animation: pageFadeIn 0.35s ease forwards;
+}
+.page.active { display: flex; }
+
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── NAV ─── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(250,248,244,0.88);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 0.5px solid rgba(58,42,28,0.1);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  flex-shrink: 0;
+}
+
+.nav-logo {
+  height: 25px;
+  width: auto;
+  max-width: 140px;
+  display: block;
+  object-fit: contain;
+}
+
+.nav-links {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.nav-btn {
+  font-family: 'Manrope', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 10px;
+  transition: color 0.25s;
+  font-weight: 400;
+}
+.nav-btn:hover, .nav-btn.active { color: var(--orange); }
+.nav-btn.active { font-weight: 500; border-bottom: 1.5px solid var(--orange); }
+
+/* ─── HOME PAGE ─── */
+.home-hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-spacer { flex: 1; }
+
+.home-bottom {
+  padding: 0 15px;
+  padding-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-top {
+  padding: 28px 28px 0px;
+  position: relative;
+  z-index: 2;
+}
+
+.home-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(52px, 17vw, 80px);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  color: var(--brown);
+}
+.home-title em { font-style: italic; color: var(--orange); }
+
+.home-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--taupe);
+  margin-bottom: 28px;
+  letter-spacing: 0.02em;
+}
+
+.cta-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 17px 24px;
+  background: var(--orange);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: 14px;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(232,96,28,0.35);
+}
+.cta-btn:active { transform: scale(0.97); box-shadow: 0 2px 10px rgba(232,96,28,0.2); }
+
+.cta-icon {
+  width: 20px; height: 20px;
+  border: 2px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 10px;
+}
+
+/* ─── CAMERA PAGE ─── */
+.camera-page {
+  background: #111;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.camera-page .nav {
+  flex-shrink: 0;
+  position: relative;
+  top: auto;
+}
+
+.camera-viewport {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  background: #0A0A0A;
+  overflow: hidden;
+}
+
+#cameraVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* Detection/scan canvas sits above video */
+#arCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Fly off from resting position — 3 s */
+@keyframes birdFlyOff {
+  0%   { transform: translate(-50%,-50%) rotate(var(--bird-rot,0deg));                                                                     opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--fly-dx,0px)), calc(-50% + var(--fly-dy,-200px))) rotate(var(--bird-rot,0deg));             opacity: 0; }
+}
+/* Full relaunch: 0.5 s fade-in + 2 s hold + 3 s fly-off = 5.5 s */
+@keyframes birdLaunch {
+  0%   { transform: translate(-50%,-50%) rotate(var(--bird-rot,0deg));                                                                     opacity: 0; }
+  9%   { transform: translate(-50%,-50%) rotate(var(--bird-rot,0deg));                                                                     opacity: 1; }
+  27%  { transform: translate(-50%,-50%) rotate(var(--bird-rot,0deg)) translateY(var(--bird-drift,-5px));                                  opacity: 1; }
+  45%  { transform: translate(-50%,-50%) rotate(var(--bird-rot,0deg));                                                                     opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--fly-dx,0px)), calc(-50% + var(--fly-dy,-200px))) rotate(var(--bird-rot,0deg));             opacity: 0; }
+}
+
+/* Bird overlays — positioned by JS */
+.bird-overlay {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  width: 6vw;
+  height: 6vw;
+  min-width: 90px;
+  min-height: 90px;
+  transition: opacity 0.5s ease;
+}
+.bird-overlay.visible   { opacity: 1; }
+.bird-overlay.flying    { animation: birdFlyOff  3s   ease-in-out forwards; transition: none; }
+.bird-overlay.launching { animation: birdLaunch  5.5s ease-in-out forwards; transition: none; }
+.bird-overlay iframe { width: 100%; height: 100%; border: none; background: transparent; }
+
+/* Glowing orange dots anchored to display objects */
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 6px 3px rgba(232,96,28,0.9), 0 0 18px 8px rgba(232,96,28,0.4); transform: translate(-50%,-50%) scale(1); }
+  50%       { box-shadow: 0 0 12px 5px rgba(232,96,28,1),  0 0 32px 14px rgba(232,96,28,0.55); transform: translate(-50%,-50%) scale(1.15); }
+}
+.glow-dot {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--orange);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 1s ease;
+}
+.glow-dot.visible {
+  opacity: 1;
+  animation: dotPulse var(--dot-dur, 2s) var(--dot-delay, 0s) ease-in-out infinite;
+}
+
+/* Scan hint */
+#scanHint {
+  position: absolute;
+  bottom: 112px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.75);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 25;
+  transition: opacity 0.5s;
+  animation: hintFade 3s ease-in-out infinite;
+  background: rgba(20,20,20,0.55);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 0.5px solid rgba(255,255,255,0.12);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  padding: 8px 18px;
+  border-radius: 20px;
+}
+@keyframes hintFade { 0%,100%{opacity:0.35;} 50%{opacity:0.8;} }
+
+/* HUD */
+.hud-detect { display:flex; flex-direction:column; align-items:flex-end; gap:3px; }
+.hud-detect-label { font-size:8px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.4); }
+.hud-detect-val { font-size:9px; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.4); transition:color 0.4s; }
+.hud-detect-val.found { color:var(--orange); }
+
+.camera-controls {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 28px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  z-index: 20;
+}
+
+.cam-ctrl-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.cam-ctrl-btn:active { opacity: 0.6; }
+
+.cam-ctrl-icon {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: rgba(20,20,20,0.55);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 0.5px solid rgba(255,255,255,0.12);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: all 0.25s ease;
+  color: white;
+}
+
+.cam-ctrl-btn.ctrl-active .cam-ctrl-icon {
+  background: rgba(232,96,28,0.45);
+  border-color: rgba(232,96,28,0.5);
+  box-shadow: 0 4px 20px rgba(232,96,28,0.35);
+}
+
+.cam-ctrl-label {
+  font-family: 'Manrope', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+
+.camera-hud {
+  position: absolute;
+  top: 14px; left: 14px; right: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  z-index: 20;
+  background: rgba(20,20,20,0.55);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 0.5px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 10px 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.hud-status { display:flex; flex-direction:column; gap:4px; }
+
+.hud-live {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.hud-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--orange);
+  animation: livePulse 1.5s ease-in-out infinite;
+}
+@keyframes livePulse { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
+
+.hud-time { font-size:9px; color:rgba(255,255,255,0.4); letter-spacing:0.1em; }
+
+/* ─── INFO MODAL ─── */
+.info-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(26,18,12,0.6);
+  backdrop-filter: blur(4px);
+  align-items: flex-end;
+}
+.info-modal.open { display: flex; }
+
+.info-sheet {
+  background: rgba(252,250,247,0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  width: 100%;
+  max-height: 88dvh;
+  border-radius: 20px 20px 0 0;
+  overflow-y: auto;
+  padding: 12px 24px 48px;
+  animation: sheetUp 0.3s cubic-bezier(0.32,0.72,0,1);
+}
+@keyframes sheetUp { from{transform:translateY(100%);} to{transform:translateY(0);} }
+
+.sheet-handle {
+  width: 36px; height: 4px;
+  background: var(--border-strong);
+  border-radius: 2px;
+  margin: 0 auto 24px;
+}
+
+.sheet-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--brown);
+  margin-bottom: 4px;
+}
+
+.sheet-subtitle {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 28px;
+}
+
+.info-step {
+  display: flex;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+.info-step:last-child { border-bottom: none; }
+
+.step-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 300;
+  color: rgba(232,96,28,0.2);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 36px;
+}
+
+.step-title {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--brown);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.step-body { font-size:13px; line-height:1.8; color:var(--brown-mid); }
+
+.sheet-close {
+  margin-top: 24px;
+  width: 100%;
+  padding: 16px;
+  background: var(--orange);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(232,96,28,0.3);
+  transition: transform 0.15s ease;
+}
+.sheet-close:active { transform: scale(0.98); }
+
+/* ─── STORY PAGE ─── */
+.story-page { background:var(--cream); height:100dvh; overflow:hidden; }
+.story-page > div { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+
+.story-hero { padding:36px 28px 32px; border-bottom:1px solid var(--border); background:var(--ivory); }
+
+.story-season {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.story-season::before { content:''; width:20px; height:1px; background:var(--orange); }
+
+.story-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px,10vw,56px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--brown);
+  margin-bottom: 15px;
+}
+.story-title em { font-style:italic; color:var(--orange); }
+
+.story-artist-line { font-family:'Cormorant Garamond',serif; font-size:15px; font-style:italic; color:var(--taupe); margin-bottom:24px; }
+
+.story-window-wrap { position:relative; aspect-ratio:4/3; background:var(--brown); overflow:hidden; margin-bottom:28px; }
+.story-window-scene { position:absolute; inset:0; background:linear-gradient(135deg,#2a1f12 0%,#1a120a 60%,#2d1e0e 100%); }
+.story-win-scarf {
+  position:absolute; top:38%; left:8%; width:84%; height:4px;
+  background:linear-gradient(90deg,transparent,var(--orange),#F5A570,var(--orange-light),var(--orange),transparent);
+  transform:rotate(-5deg); box-shadow:0 0 20px rgba(232,96,28,0.4);
+  animation:scarfDrift 6s ease-in-out infinite;
+}
+@keyframes scarfDrift { 0%,100%{transform:rotate(-5deg) translateY(0);} 50%{transform:rotate(-3deg) translateY(-6px);} }
+.story-win-particles { position:absolute; inset:0; pointer-events:none; }
+
+.story-artist-card { display:flex; gap:14px; align-items:center; padding:16px 18px; background:white; border-radius:14px; box-shadow:0 1px 8px rgba(58,42,28,0.07); }
+.artist-avatar { width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,var(--orange-pale),var(--orange)); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-size:16px; color:white; font-style:italic; }
+.artist-name { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:400; color:var(--brown); }
+.artist-role { font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--taupe); margin-top:2px; }
+
+.story-concept { padding:32px 28px; border-bottom:1px solid var(--border); }
+.section-label { font-size:10px; letter-spacing:0.3em; text-transform:uppercase; color:var(--taupe); margin-bottom:16px; }
+.concept-quote { font-family:'Cormorant Garamond',serif; font-size:21px; font-weight:300; font-style:italic; line-height:1.55; color:var(--brown); border-left:2px solid var(--orange); padding-left:20px; margin-bottom:20px; }
+.concept-body { font-size:13px; line-height:1.85; color:var(--brown-mid); }
+
+.story-keepsakes { padding:32px 28px; }
+.keepsakes-title { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:300; color:var(--brown); margin-bottom:4px; }
+.keepsakes-sub { font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--taupe); margin-bottom:24px; }
+.keepsakes-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+.keepsake-card { border:none; background:white; border-radius:16px; overflow:hidden; cursor:pointer; box-shadow:0 2px 12px rgba(58,42,28,0.08); transition:transform 0.2s ease,box-shadow 0.2s ease; }
+.keepsake-card:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(58,42,28,0.14); }
+.keepsake-preview { aspect-ratio:3/4; position:relative; overflow:hidden; }
+.kp-bg-1 { background:linear-gradient(135deg,#FAF0E8 0%,#F5E0C8 100%); }
+.kp-bg-2 { background:linear-gradient(135deg,#F0EAE2 0%,#E8D8C4 100%); }
+.kp-bg-3 { background:linear-gradient(135deg,#FDF4EE 0%,#F8E8D8 100%); grid-column:span 2; aspect-ratio:2/1; }
+
+.kp-anim-scarf { position:absolute; top:50%; left:10%; width:80%; height:3px; background:linear-gradient(90deg,transparent,var(--orange),#F5A570,var(--orange),transparent); transform:translateY(-50%) rotate(-8deg); animation:scarfDrift 5s ease-in-out infinite; box-shadow:0 0 12px rgba(232,96,28,0.3); }
+.kp-anim-window { position:absolute; inset:15%; border:1px solid rgba(232,96,28,0.25); }
+.kp-anim-window::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at center,rgba(232,96,28,0.08) 0%,transparent 70%); animation:winGlow 4s ease-in-out infinite; }
+@keyframes winGlow { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
+.kp-anim-loop { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+.kp-loop-line { width:70%; height:2px; background:linear-gradient(90deg,transparent,var(--orange),transparent); animation:loopAnim 3s ease-in-out infinite; }
+@keyframes loopAnim { 0%,100%{transform:scaleX(0.8) rotate(-5deg);opacity:0.6;} 50%{transform:scaleX(1.1) rotate(-3deg);opacity:1;} }
+
+.kp-label { padding:12px 14px; border-top:1px solid var(--border); }
+.kp-type { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--orange); margin-bottom:3px; }
+.kp-name { font-family:'Cormorant Garamond',serif; font-size:15px; font-style:italic; color:var(--brown); margin-bottom:8px; }
+.kp-dl-btn { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:600; color:var(--orange); cursor:pointer; background:rgba(232,96,28,0.08); border:none; padding:8px 14px; border-radius:20px; font-family:'Manrope',sans-serif; transition:background 0.2s ease,transform 0.15s ease; }
+.kp-dl-btn:hover { background:rgba(232,96,28,0.14); }
+.kp-dl-btn:active { transform:scale(0.96); }
+.kp-dl-icon { width:18px; height:18px; border:1px solid var(--orange); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--orange); }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: rgba(30,20,14,0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  padding: 11px 20px;
+  border-radius: 24px;
+  white-space: nowrap;
+  border: 0.5px solid rgba(255,255,255,0.12);
+  transition: transform 0.4s cubic-bezier(0.32,0.72,0,1);
+  z-index: 999;
+  font-family: 'Manrope', sans-serif;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+@media (min-width: 600px) {
+  .home-top { padding:52px 48px 0; }
+  .cta-btn { width:calc(100% - 96px); margin:0 48px 36px; }
+  .nav { padding:0 40px; }
+  .story-hero { padding:48px 48px 40px; }
+  .story-concept { padding:40px 48px; }
+  .story-keepsakes { padding:40px 48px; }
+  .keepsakes-grid { grid-template-columns:1fr 1fr 1fr; }
+  .keepsake-card:nth-child(3) { grid-column:span 1; aspect-ratio:3/4; }
+  .kp-bg-3 { aspect-ratio:3/4; }
+}
+@media (min-width: 768px) {
+  .home-top { padding:60px 60px 0; }
+  .cta-btn { max-width:380px; margin-left:60px; }
+  .nav-btn { font-size:12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<div id="page-home" class="page active">
+  <nav class="nav">
+    <img src="./hermeslogo.png" alt="Hermès" class="nav-logo">
+    <div class="nav-links">
+      <button class="nav-btn active" onclick="navigate('home')" data-page="home">Home</button>
+      <button class="nav-btn" onclick="navigate('camera')" data-page="camera">AR</button>
+      <button class="nav-btn" onclick="navigate('story')" data-page="story">Story</button>
+    </div>
+  </nav>
+  <div class="home-hero">
+    <div class="home-spacer"></div>
+    <div class="home-top">
+      <h1 class="home-title">Patchwork<br><em>Abyss<br>
+      <p class="home-subtitle">Meatpacking · Summer · 2026</p>
+    </div>
+    <div class="home-bottom">
+      <button class="cta-btn" onclick="navigate('camera')">
+        <span class="cta-icon">⊙</span>
+        Open AR Camera
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CAMERA ═══════════════ -->
+<div id="page-camera" class="page camera-page">
+  <nav class="nav" style="background:rgba(10,10,10,0.20);border-color:rgba(232,96,28,0.2);">
+    <img src="./hermeslogo.png" alt="Hermès" class="nav-logo">
+    <div class="nav-links">
+      <button class="nav-btn" onclick="navigate('home')" data-page="home" style="color:rgba(255,255,255,0.4);">Home</button>
+      <button class="nav-btn active" onclick="navigate('camera')" data-page="camera" style="color:var(--orange);border-bottom-color:var(--orange);">AR</button>
+      <button class="nav-btn" onclick="navigate('story')" data-page="story" style="color:rgba(255,255,255,0.4);">Story</button>
+    </div>
+  </nav>
+
+  <div class="camera-viewport">
+
+    <video id="cameraVideo" autoplay playsinline muted></video>
+    <canvas id="arCanvas"></canvas>
+
+    <div id="birdOverlay1" class="bird-overlay">
+      <iframe title="Birds" frameborder="0" allowfullscreen
+        mozallowfullscreen="true" webkitallowfullscreen="true"
+        allow="autoplay; fullscreen; xr-spatial-tracking"
+        src="about:blank"
+        data-src="https://sketchfab.com/models/8a45f757c17e4efb87684c91115b98d3/embed?autostart=1&transparent=1&ui_infos=0&ui_controls=0&ui_stop=0&ui_watermark=0&dnt=1">
+      </iframe>
+    </div>
+    <div id="birdOverlay2" class="bird-overlay">
+      <iframe title="Birds" frameborder="0" allowfullscreen
+        mozallowfullscreen="true" webkitallowfullscreen="true"
+        allow="autoplay; fullscreen; xr-spatial-tracking"
+        src="about:blank"
+        data-src="https://sketchfab.com/models/8a45f757c17e4efb87684c91115b98d3/embed?autostart=1&transparent=1&ui_infos=0&ui_controls=0&ui_stop=0&ui_watermark=0&dnt=1">
+      </iframe>
+    </div>
+
+    <div id="glowDot1" class="glow-dot"></div>
+    <div id="glowDot2" class="glow-dot"></div>
+    <div id="glowDot3" class="glow-dot"></div>
+    <div id="glowDot4" class="glow-dot"></div>
+
+    <div id="scanHint">Point camera at the Hermès window</div>
+
+    <div class="camera-hud">
+      <div class="hud-status">
+        <div class="hud-live"><div class="hud-dot"></div>AR Live</div>
+        <div class="hud-time" id="hudTime">—</div>
+      </div>
+      <div class="hud-detect">
+        <div class="hud-detect-label">Window</div>
+        <div class="hud-detect-val" id="detectVal">Scanning…</div>
+      </div>
+    </div>
+
+    <div class="camera-controls">
+      <button class="cam-ctrl-btn" id="audioBtn" onclick="toggleAudio()">
+        <div class="cam-ctrl-icon" id="audioIcon">♪</div>
+        <div class="cam-ctrl-label" id="audioLabel">Audio</div>
+      </button>
+      <button class="cam-ctrl-btn" id="animateBtn" onclick="animateBirds()">
+        <div class="cam-ctrl-icon">✦</div>
+        <div class="cam-ctrl-label">Animate</div>
+      </button>
+      <button class="cam-ctrl-btn" onclick="openGuide()">
+        <div class="cam-ctrl-icon">?</div>
+        <div class="cam-ctrl-label">Guide</div>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ STORY ═══════════════ -->
+<div id="page-story" class="page story-page">
+  <nav class="nav">
+    <img src="./hermeslogo.png" alt="Hermès" class="nav-logo">
+    <div class="nav-links">
+      <button class="nav-btn" onclick="navigate('home')" data-page="home">Home</button>
+      <button class="nav-btn" onclick="navigate('camera')" data-page="camera">AR</button>
+      <button class="nav-btn active" onclick="navigate('story')" data-page="story">Story</button>
+    </div>
+  </nav>
+  <div data-scroll class="scroll-inner" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;height:calc(100dvh - 56px);">
+    <div class="story-hero">
+      <div class="story-season">Meatpacking · Summer · 2026</div>
+      <div class="story-window-wrap">
+        <img src="./wallstwin.jpg" alt="Through The Looking Glass window display" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+      </div>
+      <h2 class="story-title">Patchwork Abyss<h2></h2>
+      <!-- <div class="story-artist-card">
+        <div class="artist-avatar">TL</div>
+        <div>
+          <div class="artist-name">Jeffrey Sincich</div>
+          <div class="artist-role">Artist · Illustrator</div>
+        </div>
+      </div> -->
+    </div>
+    <div class="story-concept">
+      <div class="section-label">The Concept</div>
+      <div class="concept-quote">Escape to the clouds as gravity leaves the room! We're going up, and although we may not know why, we're secretly excited to find a new peace of mind.</div>
+      <!-- <p class="concept-body">Escape to the clouds as gravity leaves the room! We're going up, and although we may not know why, we're secretly excited to find a new peace of mind.</p> -->
+    </div>
+    <div class="story-keepsakes">
+      <div class="keepsakes-title">Digital Keepsakes</div>
+      <div class="keepsakes-sub">Yours to keep · Download free</div>
+      <div class="keepsakes-grid">
+        <div class="keepsake-card">
+          <div class="keepsake-preview kp-bg-1">
+            <img src="./wallstwin2.jpg" alt="Wall Street Window Detail" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
+            <div class="kp-anim-scarf" style="position:absolute;top:50%;left:10%;"></div>
+          </div>
+          <div class="kp-label">
+            <div class="kp-type">Window</div>
+            <div class="kp-name">Photographed by Skot Yobaggy</div>
+            <button class="kp-dl-btn" onclick="downloadFile('./wallstwin2.jpg', 'hermes-window.jpg')"><div class="kp-dl-icon">↓</div>Download</button>
+          </div>
+        </div>
+        <div class="keepsake-card">
+          <div class="keepsake-preview kp-bg-2">
+            <img src="./welcome.png" alt="Fenêtre, Minuit" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'">
+            <!-- <div class="kp-anim-window" style="position:absolute;inset:15%;"></div> -->
+          </div>
+          <div class="kp-label">
+            <div class="kp-type">Illustration</div>
+            <div class="kp-name">Animated by Amanda</div>
+            <button class="kp-dl-btn" onclick="downloadFile('./welcome.png', 'hermes-illustration.png')"><div class="kp-dl-icon">↓</div>Download</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ GUIDE MODAL ═══════════════ -->
+<div class="info-modal" id="infoModal" onclick="closeGuide(event)">
+  <div class="info-sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">How to explore</div>
+    <div class="sheet-subtitle">Your complete guide</div>
+    <div class="info-step">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title">Position your phone</div>
+        <div class="step-body">Hold your phone at arm's length, pointed at the Hermès window display. Keep it steady while the AR engine scans.</div>
+      </div>
+    </div>
+    <div class="info-step">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title">Watch the birds appear</div>
+        <div class="step-body">Once the window is detected, a flock of animated birds will emerge — layered into the real scene through your camera.</div>
+      </div>
+    </div>
+    <div class="info-step">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title">Listen to the window</div>
+        <div class="step-body">Audio plays and shifts with time of day. At dawn, hear the atelier. At dusk, perhaps distant horses on cobblestone.</div>
+      </div>
+    </div>
+    <div class="info-step">
+      <div class="step-num">4</div>
+      <div>
+        <div class="step-title">Take something with you</div>
+        <div class="step-body">Visit the Story page to download wallpapers as keepsakes — a fragment of the window, yours to keep long after the season ends.</div>
+      </div>
+    </div>
+    <button class="sheet-close" onclick="closeGuide()">Close</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ─── NAVIGATION ─── */
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active');
+    p.style.display = 'none';
+  });
+  const target = document.getElementById('page-' + page);
+  if (!target) return;
+  target.style.display = 'flex';
+  target.classList.add('active');
+  target.querySelectorAll('.scroll-inner').forEach(el => { el.scrollTop = 0; });
+  document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.page === page);
+  });
+  if (page === 'camera') {
+    startCamera();
+    if (!audioMuted) playAudio();
+  } else {
+    stopCamera();
+    if (typeof audio !== 'undefined') audio.pause();
+  }
+}
+
+/* ─── CAMERA + DETECTION ENGINE ─── */
+let cameraStream = null;
+let arRAF        = null;
+let arAnimTime   = 0;
+let detBuf       = null;
+let detCtx       = null;
+let windowRect   = null;
+let windowStable = 0;
+// Fixed centre positions for each bird element (as fractions of canvas size).
+// Defaults match the known positions in the Hermès window installation;
+// updated each detection frame by centroid analysis.
+const bird1Cx = 0.60, bird1Cy = 0.44; // upper-left of clouds painting (yellow frame)
+const bird2Cx = 0.30, bird2Cy = 0.28; // bottom-right of horse painting (upper-left)
+
+// // Glow dot positions — fractions within windowRect, matching magenta dots in reference photo
+// const dots = [
+//   { id: 'glowDot1', cx: 0.16, cy: 0.75 }, // left — round side table / red bag
+//   { id: 'glowDot2', cx: 0.42, cy: 0.70 }, // center-left — open book on chair
+//   { id: 'glowDot3', cx: 0.55, cy: 0.70 }, // center-right — floating boots
+//   { id: 'glowDot4', cx: 0.74, cy: 0.85 }, // lower-right — white box items
+// ];
+
+async function startCamera() {
+  try {
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: false
+    });
+    const video = document.getElementById('cameraVideo');
+    video.srcObject = cameraStream;
+    video.addEventListener('loadedmetadata', initAR, { once: true });
+  } catch (err) {
+    console.error('Camera error:', err);
+    document.getElementById('scanHint').textContent = 'Camera access required';
+  }
+}
+
+function stopCamera() {
+  if (arRAF) { cancelAnimationFrame(arRAF); arRAF = null; }
+  if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
+  windowRect   = null;
+  windowStable = 0;
+  arAnimTime   = 0;
+  hideBirds();
+  const c = document.getElementById('arCanvas');
+  if (c) c.getContext('2d').clearRect(0, 0, c.width, c.height);
+  setDetectHUD(false);
+}
+
+function initAR() {
+  const video  = document.getElementById('cameraVideo');
+  const canvas = document.getElementById('arCanvas');
+  canvas.width  = video.videoWidth  || window.innerWidth;
+  canvas.height = video.videoHeight || window.innerHeight;
+  detBuf = document.createElement('canvas');
+  detBuf.width  = Math.floor(canvas.width  / 4);
+  detBuf.height = Math.floor(canvas.height / 4);
+  detCtx = detBuf.getContext('2d', { willReadFrequently: true });
+  arLoop();
+}
+
+function arLoop() {
+  arRAF = requestAnimationFrame(arLoop);
+  const video  = document.getElementById('cameraVideo');
+  const canvas = document.getElementById('arCanvas');
+  if (!video || video.readyState < 2 || !canvas) return;
+
+  arAnimTime += 0.016;
+  const ctx = canvas.getContext('2d');
+
+  if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
+    canvas.width  = video.videoWidth;
+    canvas.height = video.videoHeight;
+    if (detBuf) { detBuf.width = Math.floor(canvas.width/4); detBuf.height = Math.floor(canvas.height/4); }
+  }
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (Math.round(arAnimTime * 60) % 10 === 0) detectWindow(video, canvas);
+
+  if (windowRect && windowStable > 5) {
+    drawAROverlay(ctx, windowRect, arAnimTime);
+    setDetectHUD(true);
+    document.getElementById('scanHint').style.opacity = '0';
+    positionBirdOverlays(canvas);
+    positionDots(canvas);
+    showBirds();
+  } else {
+    drawScanOverlay(ctx, canvas.width, canvas.height, arAnimTime);
+    setDetectHUD(false);
+    document.getElementById('scanHint').style.opacity = '1';
+    hideBirds();
+  }
+}
+
+/* Convert RGB (0-255) to HSL (H: 0-360, S: 0-100, L: 0-100) */
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const mx = Math.max(r,g,b), mn = Math.min(r,g,b);
+  const l = (mx + mn) / 2;
+  if (mx === mn) return [0, 0, l * 100];
+  const d = mx - mn;
+  const s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn);
+  let h;
+  switch (mx) {
+    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+    case g: h = ((b - r) / d + 2) / 6; break;
+    default: h = ((r - g) / d + 4) / 6;
+  }
+  return [h * 360, s * 100, l * 100];
+}
+
+/*
+  Color-signature detector for the specific Hermès Madison Ave window display.
+  Looks for three co-present hues that are unique to this installation:
+    - Mint/seafoam green  (store walls + counter)
+    - Warm yellow/mustard (clay frame around the sky panel)
+    - Sky blue            (painted backdrop inside the frame)
+  All three must be above their pixel-count thresholds simultaneously.
+*/
+function detectWindow(video, canvas) {
+  const bw = detBuf.width, bh = detBuf.height;
+  detCtx.drawImage(video, 0, 0, bw, bh);
+  const { data } = detCtx.getImageData(0, 0, bw, bh);
+
+  const total = bw * bh;
+  let mintCount = 0, yellowCount = 0, skyCount = 0;
+  let glareCount = 0, usableTotal = 0;
+
+  // Track bounding box of mint pixels in detBuf space
+  let minX = bw, maxX = 0, minY = bh, maxY = 0;
+
+  for (let i = 0; i < total; i++) {
+    const r = data[i * 4], g = data[i * 4 + 1], b = data[i * 4 + 2];
+    const [h, s, l] = rgbToHsl(r, g, b);
+
+    if (l > 82 && s < 18) { glareCount++; continue; }
+    usableTotal++;
+
+    if (h >= 140 && h <= 200 && s >= 15 && s <= 80 && l >= 28 && l <= 72) {
+      mintCount++;
+      const xi = i % bw, yi = (i / bw) | 0;
+      if (xi < minX) minX = xi;
+      if (xi > maxX) maxX = xi;
+      if (yi < minY) minY = yi;
+      if (yi > maxY) maxY = yi;
+    }
+    if (h >= 25  && h <= 70  && s >= 28 && l >= 38 && l <= 86) yellowCount++;
+    if (h >= 180 && h <= 230 && s >= 15 && l >= 48 && l <= 90) skyCount++;
+  }
+
+  const eff         = Math.max(usableTotal, 1);
+  const mintRatio   = mintCount   / eff;
+  const yellowRatio = yellowCount / eff;
+  const skyRatio    = skyCount    / eff;
+  const glareRatio  = glareCount  / total;
+
+  const glareOnGlass = glareRatio > 0.08;
+  const mintMin      = glareOnGlass ? 0.022 : 0.03;
+  const accentMin    = glareOnGlass ? 0.006 : 0.008;
+
+  const detected = mintRatio > mintMin && (yellowRatio > accentMin || skyRatio > accentMin);
+
+  if (detected) {
+    windowStable = Math.min(windowStable + 1, 40);
+
+    // Scale detected bounds from detBuf → canvas space, with a small padding margin
+    const pad  = 0.04;
+    const scX  = canvas.width  / bw;
+    const scY  = canvas.height / bh;
+    const rawX = Math.max(0, (minX / bw - pad)) * canvas.width;
+    const rawY = Math.max(0, (minY / bh - pad)) * canvas.height;
+    const rawW = Math.min(canvas.width,  ((maxX - minX) / bw + pad * 2) * canvas.width);
+    const rawH = Math.min(canvas.height, ((maxY - minY) / bh + pad * 2) * canvas.height);
+
+    // Lerp toward the new rect so the overlay doesn't snap/jitter each frame
+    const alpha = windowRect ? 0.12 : 1.0;
+    windowRect = windowRect || { x: rawX, y: rawY, w: rawW, h: rawH };
+    windowRect.x += (rawX - windowRect.x) * alpha;
+    windowRect.y += (rawY - windowRect.y) * alpha;
+    windowRect.w += (rawW - windowRect.w) * alpha;
+    windowRect.h += (rawH - windowRect.h) * alpha;
+  } else {
+    windowStable = Math.max(0, windowStable - 1);
+    if (windowStable === 0) windowRect = null;
+  }
+}
+
+function positionDots(canvas) {
+  if (!windowRect) return;
+  const rect   = canvas.getBoundingClientRect();
+  const scaleX = rect.width  / canvas.width;
+  const scaleY = rect.height / canvas.height;
+  dots.forEach(({ id, cx, cy }) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.left = ((windowRect.x + cx * windowRect.w) * scaleX) + 'px';
+    el.style.top  = ((windowRect.y + cy * windowRect.h) * scaleY) + 'px';
+  });
+}
+
+function positionBirdOverlays(canvas) {
+  if (!windowRect) return;
+  const rect   = canvas.getBoundingClientRect();
+  const scaleX = rect.width  / canvas.width;
+  const scaleY = rect.height / canvas.height;
+  // cx/cy are fractions within the detected window rect, not the full canvas,
+  // so positions stay correct regardless of phone distance or crop.
+  [
+    { id: 'birdOverlay1', cx: bird1Cx, cy: bird1Cy },
+    { id: 'birdOverlay2', cx: bird2Cx, cy: bird2Cy },
+  ].forEach(({ id, cx, cy }) => {
+    const el = document.getElementById(id);
+    // Don't reposition mid-animation — that would fight the fly-off transform
+    if (!el || el.classList.contains('flying') || el.classList.contains('launching')) return;
+    el.style.left = ((windowRect.x + cx * windowRect.w) * scaleX) + 'px';
+    el.style.top  = ((windowRect.y + cy * windowRect.h) * scaleY) + 'px';
+  });
+}
+
+let birdsState = 'hidden'; // 'hidden' | 'resting' | 'animating'
+
+function setAnimateBtn(active) {
+  document.getElementById('animateBtn')?.classList.toggle('ctrl-active', active);
+}
+
+function setFlyProps(overlay) {
+  const rot   = (Math.random() * 40 - 20).toFixed(1);
+  const drift = (4 + Math.random() * 6).toFixed(1);
+  const angle = Math.random() * Math.PI * 2;
+  const dist  = Math.hypot(window.innerWidth, window.innerHeight) * 1.3;
+  overlay.style.setProperty('--bird-rot',   `${rot}deg`);
+  overlay.style.setProperty('--bird-drift', `-${drift}px`);
+  overlay.style.setProperty('--fly-dx',     `${(Math.cos(angle) * dist).toFixed(0)}px`);
+  overlay.style.setProperty('--fly-dy',     `${(Math.sin(angle) * dist).toFixed(0)}px`);
+}
+
+function snapPosition(overlay, cx, cy) {
+  const canvas = document.getElementById('arCanvas');
+  if (!canvas || !windowRect) return;
+  const r = canvas.getBoundingClientRect();
+  overlay.style.left = ((windowRect.x + cx * windowRect.w) * (r.width  / canvas.width))  + 'px';
+  overlay.style.top  = ((windowRect.y + cy * windowRect.h) * (r.height / canvas.height)) + 'px';
+}
+
+function showBirds() {
+  if (birdsState !== 'hidden') return;
+  birdsState = 'resting';
+  [{ id: 'birdOverlay1', cx: bird1Cx, cy: bird1Cy },
+   { id: 'birdOverlay2', cx: bird2Cx, cy: bird2Cy }].forEach(({ id, cx, cy }) => {
+    const overlay = document.getElementById(id);
+    if (!overlay) return;
+    snapPosition(overlay, cx, cy);
+    const iframe = overlay.querySelector('iframe');
+    if (iframe.src === 'about:blank') iframe.src = iframe.dataset.src;
+    setFlyProps(overlay); // set random rot so each looks different at rest
+    overlay.classList.remove('flying', 'launching');
+    void overlay.offsetWidth;
+    overlay.classList.add('visible');
+  });
+}
+
+function hideBirds() {
+  birdsState = 'hidden';
+  setAnimateBtn(false);
+  ['birdOverlay1', 'birdOverlay2'].forEach(id => {
+    document.getElementById(id).classList.remove('visible', 'flying', 'launching');
+  });
+}
+
+function animateBirds() {
+  if (!windowRect || birdsState === 'animating') return;
+  birdsState = 'animating';
+  setAnimateBtn(true);
+  let done = 0;
+  const onDone = () => { if (++done >= 2) { birdsState = 'hidden'; setAnimateBtn(false); } };
+
+  if (birdsState === 'resting') {
+    // Birds already visible — fly them off directly (no hold needed)
+    ['birdOverlay1', 'birdOverlay2'].forEach(id => {
+      const overlay = document.getElementById(id);
+      setFlyProps(overlay);
+      overlay.classList.remove('visible', 'launching');
+      void overlay.offsetWidth;
+      overlay.classList.add('flying');
+      overlay.addEventListener('animationend', () => {
+        overlay.classList.remove('flying');
+        onDone();
+      }, { once: true });
+    });
+  } else {
+    // Birds are hidden — full 0.5 s fade-in + 2 s hold + 3 s fly-off
+    const launch = (id, cx, cy) => {
+      const overlay = document.getElementById(id);
+      snapPosition(overlay, cx, cy);
+      const iframe = overlay.querySelector('iframe');
+      if (iframe.src === 'about:blank') iframe.src = iframe.dataset.src;
+      setFlyProps(overlay);
+      overlay.classList.remove('visible', 'flying');
+      void overlay.offsetWidth;
+      overlay.classList.add('launching');
+      overlay.addEventListener('animationend', () => {
+        overlay.classList.remove('launching');
+        onDone();
+      }, { once: true });
+    };
+    launch('birdOverlay1', bird1Cx, bird1Cy);
+    setTimeout(() => launch('birdOverlay2', bird2Cx, bird2Cy), 600);
+  }
+}
+
+function drawScanOverlay(ctx, W, H, t) {
+  ctx.save();
+  const scanY = ((t * 0.15) % 1) * H;
+  const grd = ctx.createLinearGradient(0, 0, W, 0);
+  grd.addColorStop(0,    'rgba(232,96,28,0)');
+  grd.addColorStop(0.25, 'rgba(232,96,28,0.45)');
+  grd.addColorStop(0.5,  'rgba(245,165,112,0.85)');
+  grd.addColorStop(0.75, 'rgba(232,96,28,0.45)');
+  grd.addColorStop(1,    'rgba(232,96,28,0)');
+  ctx.strokeStyle = grd; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(0, scanY); ctx.lineTo(W, scanY); ctx.stroke();
+  const glowGrd = ctx.createLinearGradient(0, scanY, 0, scanY+40);
+  glowGrd.addColorStop(0, 'rgba(232,96,28,0.08)');
+  glowGrd.addColorStop(1, 'rgba(232,96,28,0)');
+  ctx.fillStyle = glowGrd; ctx.fillRect(0, scanY, W, 40);
+  const bx=W*0.15, by=H*0.18, bw=W*0.70, bh=H*0.64;
+  const bLen = Math.min(bw,bh)*0.09;
+  const alpha = 0.4 + 0.3*Math.sin(t*2);
+  ctx.strokeStyle = `rgba(232,96,28,${alpha})`; ctx.lineWidth = 2;
+  [[bx,by,1,1],[bx+bw,by,-1,1],[bx,by+bh,1,-1],[bx+bw,by+bh,-1,-1]].forEach(([cx,cy,dx,dy]) => {
+    ctx.beginPath(); ctx.moveTo(cx+dx*bLen,cy); ctx.lineTo(cx,cy); ctx.lineTo(cx,cy+dy*bLen); ctx.stroke();
+  });
+  ctx.restore();
+}
+
+function drawAROverlay(ctx, r, t) {
+  ctx.save();
+  const bLen = Math.min(r.w, r.h) * 0.1;
+  ctx.strokeStyle = 'rgba(232,96,28,0.7)'; ctx.lineWidth = 2;
+  [[r.x,r.y,1,1],[r.x+r.w,r.y,-1,1],[r.x,r.y+r.h,1,-1],[r.x+r.w,r.y+r.h,-1,-1]].forEach(([cx,cy,dx,dy]) => {
+    ctx.beginPath(); ctx.moveTo(cx+dx*bLen,cy); ctx.lineTo(cx,cy); ctx.lineTo(cx,cy+dy*bLen); ctx.stroke();
+  });
+  ctx.restore();
+}
+
+function setDetectHUD(found) {
+  const el = document.getElementById('detectVal');
+  if (!el) return;
+  if (found) { el.textContent = 'Detected ✦'; el.classList.add('found'); }
+  else       { el.textContent = 'Scanning…';  el.classList.remove('found'); }
+}
+
+/* ─── CLOCK ─── */
+function updateTime() {
+  const now = new Date();
+  const el  = document.getElementById('hudTime');
+  if (el) el.textContent =
+    now.getHours().toString().padStart(2,'0') + ':' +
+    now.getMinutes().toString().padStart(2,'0');
+}
+updateTime();
+setInterval(updateTime, 30000);
+
+/* ─── PARTICLES ─── */
+function makeParticles(containerId, count, color) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    const size = Math.random() > 0.5 ? 2 : 1;
+    p.style.cssText = `position:absolute;width:${size}px;height:${size}px;border-radius:50%;background:${color};left:${5+Math.random()*90}%;bottom:${Math.random()*50}%;animation:particleRise ${5+Math.random()*8}s linear ${-Math.random()*8}s infinite;opacity:0;`;
+    el.appendChild(p);
+  }
+}
+makeParticles('storyParticles', 10, 'rgba(232,96,28,0.4)');
+
+/* ─── AUDIO ─── */
+let audio      = new Audio();
+audio.loop     = true;
+let audioMuted = false;
+
+function getTimeBasedSrc() {
+  const h = new Date().getHours();
+  if (h >= 5  && h < 12) return './audio/morning.mp3';
+  if (h >= 12 && h < 18) return './audio/afternoon.mp3';
+  return './audio/evening.mp3';
+}
+
+function playAudio() {
+  const src = getTimeBasedSrc();
+  if (audio.src !== src) audio.src = src;
+  audio.volume = 0.6;
+  audio.play().catch(() => {});
+}
+
+function toggleAudio() {
+  audioMuted = !audioMuted;
+  const btn   = document.getElementById('audioBtn');
+  const icon  = document.getElementById('audioIcon');
+  const label = document.getElementById('audioLabel');
+  if (audioMuted) {
+    audio.pause();
+    btn.classList.add('ctrl-active');
+    icon.textContent  = '✕';
+    label.textContent = 'Muted';
+  } else {
+    playAudio();
+    btn.classList.remove('ctrl-active');
+    icon.textContent  = '♪';
+    label.textContent = 'Audio';
+  }
+}
+
+/* ─── GUIDE MODAL ─── */
+function openGuide()  { document.getElementById('infoModal').classList.add('open'); }
+function closeGuide(e) {
+  if (!e || e.target === document.getElementById('infoModal'))
+    document.getElementById('infoModal').classList.remove('open');
+}
+
+/* ─── DOWNLOAD ─── */
+function downloadFile(src, filename) {
+  if (!filename) filename = src.split('/').pop();
+  const label = filename.replace(/^hermes-/,'').replace(/\.[^.]+$/,'').replace(/-/g,' ');
+  const toast = document.getElementById('toast');
+  toast.textContent = label + ' — preparing…';
+  toast.classList.add('show');
+  fetch(src)
+    .then(res => { if (!res.ok) throw new Error(); return res.blob(); })
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a); URL.revokeObjectURL(url);
+      toast.textContent = label + ' — saved ✓';
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    })
+    .catch(() => {
+      toast.textContent = 'File not available';
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    });
+}
+</script>
+
+<style>
+@keyframes particleRise {
+  0%   { opacity:0; transform:translateY(10px); }
+  30%  { opacity:0.5; }
+  70%  { opacity:0.5; }
+  100% { opacity:0; transform:translateY(-60px) translateX(10px); }
+}
+</style>
+</body>
+</html>
