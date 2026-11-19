@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Through The Looking Glass</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -495,7 +495,7 @@
             left: 50%;
             top: 50%;
             width: 300px;
-            aspect-ratio: var(--AR);
+            height: 283px;
             transform: translate(-50%, -50%);
             container-type: size;
             opacity: 0;
@@ -507,11 +507,11 @@
         }
 
         .ar.cam.locked .stage {
-            transition: opacity .6s, left .14s linear, top .14s linear, width .14s linear
+            transition: opacity .6s, left .14s linear, top .14s linear, width .14s linear, height .14s linear
         }
 
         .ar.cam.snapping .stage {
-            transition: opacity .6s, left .5s var(--ease), top .5s var(--ease), width .5s var(--ease)
+            transition: opacity .6s, left .5s var(--ease), top .5s var(--ease), width .5s var(--ease), height .5s var(--ease)
         }
 
         .layer {
@@ -2095,10 +2095,13 @@
 
             /* ---------- frame pose (screen px) ---------- */
             const TOP = 128, BOT = 112;
-            let pose = { cx: 0, cy: 0, w: 0 };
-            function defaultPose() { const vw = innerWidth, vh = innerHeight; const w = Math.min(vw * .86, (vh - TOP - BOT) * AR); return { cx: vw / 2, cy: TOP + (vh - TOP - BOT) / 2, w } }
-            function place() { stage.style.left = pose.cx + 'px'; stage.style.top = pose.cy + 'px'; stage.style.width = pose.w + 'px' }
-            addEventListener('resize', () => { if (!locked) { pose = defaultPose(); place() } });
+            let pose = { cx: 0, cy: 0, w: 0, h: 0 };
+            // Measure the AR panel itself. On iPhone Safari it can be taller than innerHeight
+            // (toolbars overlay the page), which made the frame land too high and too small.
+            function panel() { return { w: arEl.clientWidth || innerWidth, h: arEl.clientHeight || innerHeight } }
+            function defaultPose() { const p = panel(), vw = p.w, vh = p.h; const w = Math.min(vw * .86, (vh - TOP - BOT) * AR); return { cx: vw / 2, cy: TOP + (vh - TOP - BOT) / 2, w, h: w / AR } }
+            function place() { stage.style.left = pose.cx + 'px'; stage.style.top = pose.cy + 'px'; stage.style.width = pose.w + 'px'; stage.style.height = pose.h + 'px' }
+            addEventListener('resize', () => { if (!locked) { pose = defaultPose(); place() } else { unlock(true) } });
 
             /* drag / pinch / wheel to align */
             const pts = new Map(); let g0 = null;
@@ -2111,13 +2114,13 @@
                 const n = snap(); if (!g0 || n.c !== g0.c) { g0 = n; return }
                 if (Math.hypot(n.x - g0.x, n.y - g0.y) > 4 || n.c === 2) unlock(true);
                 pose.cx = g0.p.cx + (n.x - g0.x); pose.cy = g0.p.cy + (n.y - g0.y);
-                if (n.c === 2 && g0.d > 0) pose.w = clamp(g0.p.w * n.d / g0.d, 120, innerWidth * 2.2);
+                if (n.c === 2 && g0.d > 0) { const f = clamp(g0.p.w * n.d / g0.d, 120, panel().w * 2.2) / g0.p.w; pose.w = g0.p.w * f; pose.h = g0.p.h * f }
                 place();
             });
             const up = e => { pts.delete(e.pointerId); g0 = pts.size ? snap() : null };
             arEl.addEventListener('pointerup', up); arEl.addEventListener('pointercancel', up);
             function snap() { const a = [...pts.values()]; const x = a.reduce((s, p) => s + p.x, 0) / (a.length || 1), y = a.reduce((s, p) => s + p.y, 0) / (a.length || 1); const d = a.length > 1 ? Math.hypot(a[0].x - a[1].x, a[0].y - a[1].y) : 0; return { x, y, d, c: a.length, p: { ...pose } } }
-            arEl.addEventListener('wheel', e => { if (!stream) return; e.preventDefault(); unlock(true); pose.w = clamp(pose.w * (e.deltaY < 0 ? 1.04 : .96), 120, innerWidth * 2.2); place() }, { passive: false });
+            arEl.addEventListener('wheel', e => { if (!stream) return; e.preventDefault(); unlock(true); const f = clamp(pose.w * (e.deltaY < 0 ? 1.04 : .96), 120, panel().w * 2.2) / pose.w; pose.w *= f; pose.h *= f; place() }, { passive: false });
             function clamp(v, a, b) { return Math.max(a, Math.min(b, v)) }
 
             /* ---------- camera ---------- */
@@ -2212,36 +2215,52 @@
                 });
             }
             function grab() {
-                const vw = innerWidth, vh = innerHeight, v0 = video.videoWidth, h0 = video.videoHeight; if (!v0 || !h0) return null;
+                // map the camera frame exactly as the <video> element shows it (object-fit: cover inside the AR panel)
+                const vw = video.clientWidth || panel().w, vh = video.clientHeight || panel().h, v0 = video.videoWidth, h0 = video.videoHeight;
+                if (!v0 || !h0 || !vw || !vh) return null;
                 const sc = Math.max(vw / v0, vh / h0), sw = vw / sc, sh = vh / sc, sx = (v0 - sw) / 2, sy = (h0 - sh) / 2;
                 const PH = Math.round(PW * vh / vw); if (pc.width !== PW || pc.height !== PH) { pc.width = PW; pc.height = PH }
                 px.drawImage(video, sx, sy, sw, sh, 0, 0, PW, PH);
                 return { ii: integral(px.getImageData(0, 0, PW, PH).data, PW, PH), k: PW / vw };
             }
-            function search(fr, base, range, step, scales) {
-                let best = { s: -2, cx: base.cx, cy: base.cy, w: base.w };
-                for (const sc of scales) {
-                    const w = base.w * sc, h = w / AR; const r = range * base.w, st = step * base.w;
-                    for (let dy = -r; dy <= r + 1e-6; dy += st)for (let dx = -r; dx <= r + 1e-6; dx += st) {
-                        const cx = base.cx + dx, cy = base.cy + dy;
-                        const v = znorm(sample(fr.ii, (cx - w / 2) * fr.k, (cy - h / 2) * fr.k, w * fr.k / GX, h * fr.k / GY));
-                        const s = score(tpl, v); if (s > best.s) best = { s, cx, cy, w };
+            function scoreAt(fr, cx, cy, w, h) { return score(tpl, znorm(sample(fr.ii, (cx - w / 2) * fr.k, (cy - h / 2) * fr.k, w * fr.k / GX, h * fr.k / GY))) }
+            // Search positions / sizes / shape around a pose. The window can look a little wider or
+            // taller in perspective, so the frame's proportions may flex by up to 10% either way.
+            function search(fr, base, o) {
+                const asp0 = base.w / base.h; let best = { s: -2, cx: base.cx, cy: base.cy, w: base.w, h: base.h };
+                for (const am of (o.aspects || [1])) for (const sc of o.scales) {
+                    const w = base.w * sc, asp = clamp(asp0 * am, AR * .9, AR * 1.1), h = w / asp, r = o.range * base.w, st = o.step * base.w;
+                    for (let dy = -r; dy <= r + 1e-6; dy += st) for (let dx = -r; dx <= r + 1e-6; dx += st) {
+                        const cx = base.cx + dx, cy = base.cy + dy, s = scoreAt(fr, cx, cy, w, h);
+                        if (s > best.s) best = { s, cx, cy, w, h };
                     }
                 }
                 return best;
+            }
+            // fine-tune a coarse match: position + size, then shape, then a last small pass
+            function refine(fr, b) {
+                b = search(fr, b, { range: .03, step: .01, scales: [.97, .985, 1, 1.015, 1.03] });
+                b = search(fr, b, { range: .01, step: .01, scales: [1], aspects: [.95, .975, 1, 1.025, 1.05] });
+                b = search(fr, b, { range: .008, step: .004, scales: [.99, 1, 1.01] });
+                return b;
             }
             function tick() {
                 if (!detecting) return;
                 const fr = grab();
                 if (fr && tpl) {
                     if (!locked) {
-                        const b = search(fr, pose, .12, .03, [.86, .93, 1, 1.08, 1.16]);
+                        const b = search(fr, pose, { range: .12, step: .03, scales: [.86, .93, 1, 1.08, 1.16] });
                         lastScore = b.s; hits = b.s >= LOCK ? hits + 1 : Math.max(0, hits - 1);
-                        if (hits >= NEED && !pts.size) { pose = { cx: b.cx, cy: b.cy, w: b.w }; lockOn() }
+                        if (hits >= NEED && !pts.size) { const r = refine(fr, b); pose = { cx: r.cx, cy: r.cy, w: r.w, h: r.h }; lastScore = r.s; lockOn() }
                     } else {
-                        const b = search(fr, pose, .04, .02, [.97, 1, 1.03]);
-                        lastScore = b.s;
-                        if (b.s >= KEEP) { misses = 0; if (!pts.size) { pose.cx += (b.cx - pose.cx) * .6; pose.cy += (b.cy - pose.cy) * .6; pose.w += (b.w - pose.w) * .6; place() } }
+                        const s0 = scoreAt(fr, pose.cx, pose.cy, pose.w, pose.h);
+                        const b = search(fr, pose, { range: .03, step: .015, scales: [.98, 1, 1.02], aspects: [.985, 1, 1.015] });
+                        lastScore = Math.max(s0, b.s);
+                        if (lastScore >= KEEP) {
+                            misses = 0;
+                            // only move when the new spot is clearly better, so the frame can't creep away from the window
+                            if (!pts.size && b.s > s0 + .012) { const k = .5; pose.cx += (b.cx - pose.cx) * k; pose.cy += (b.cy - pose.cy) * k; pose.w += (b.w - pose.w) * k; pose.h += (b.h - pose.h) * k; place() }
+                        }
                         else if (++misses >= LOSE) { unlock(true); toast('Window lost. Line up the frame again.') }
                     }
                     $('#meter').style.width = clamp((lastScore - .1) / (LOCK - .1), 0, 1) * 100 + '%';
